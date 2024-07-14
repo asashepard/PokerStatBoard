@@ -174,9 +174,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202407140325008_InitialCreate.cs" />
+    <Compile Include="Migrations\202407140325008_InitialCreate.Designer.cs">
+      <DependentUpon>202407140325008_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407140345131_Add-Models.cs" />
+    <Compile Include="Migrations\202407140345131_Add-Models.Designer.cs">
+      <DependentUpon>202407140345131_Add-Models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BuyInModel.cs" />
+    <Compile Include="Models\CashOutModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PlayerModel.cs" />
+    <Compile Include="Models\PokerGameModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -281,6 +294,14 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202407140325008_InitialCreate.resx">
+      <DependentUpon>202407140325008_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407140345131_Add-Models.resx">
+      <DependentUpon>202407140345131_Add-Models.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

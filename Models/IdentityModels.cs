@@ -20,6 +20,14 @@ namespace PokerStatBoard.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<PokerGameModel> PokerGames { get; set; }
+
+        public DbSet<PlayerModel> Players { get; set; }
+
+        public DbSet<BuyInModel> BuyIns { get; set; }
+
+        public DbSet<CashOutModel> CashOuts { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
