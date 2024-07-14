@@ -14,18 +14,15 @@ namespace PokerStatBoard.Models
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public List<Guid> BuyInIDs { get; set; }
-
-        [Required]
-        public List<Guid> CashOutIDs { get; set; }
+        public PlayerModel()
+        {
+            PlayerID = Guid.NewGuid();
+        }
 
         public PlayerModel(string name)
         {
             PlayerID = Guid.NewGuid();
             Name = name;
-            BuyInIDs = new List<Guid>();
-            CashOutIDs = new List<Guid>();
         }
     }
 }

@@ -28,6 +28,8 @@ namespace PokerStatBoard.Models
 
         public DbSet<CashOutModel> CashOuts { get; set; }
 
+        public DbSet<CurrentGameModel> CurrentGame { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

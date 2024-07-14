@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Game";
+}
+
+<main>
+    <script>
+        function joinPlayerRedirect() {
+            var url = '@Url.Action("Index", "JoinPlayer")';
+            window.location.href = url;
+        }
+        function cashOutPlayerRedirect() {
+            var url = '@Url.Action("Index", "CashOutPlayer")';
+            window.location.href = url;
+        }
+        function endGameRedirect() {
+            var url = '@Url.Action("Index", "EndGame")';
+            window.location.href = url;
+        }
+    </script>
+
+    <button onclick="joinPlayerRedirect()">Join Player</button>
+    <button onclick="cashOutPlayerRedirect()">Cash Out Player</button>
+    <button onclick="endGameRedirect()">End Game</button>
+</main>
