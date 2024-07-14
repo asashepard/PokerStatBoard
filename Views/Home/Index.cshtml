@@ -12,13 +12,8 @@
             var url = '@Url.Action("Index", "StartGame")';
             window.location.href = url;
         }
-        function endGameRedirect() {
-            var url = '@Url.Action("Index", "EndGame")';
-            window.location.href = url;
-        }
     </script>
 
     <button onclick="addPlayerRedirect()">Create New Player</button>
     <button onclick="startGameRedirect()">Start Game</button>
-    <button onclick="endGameRedirect()">End Game</button>
 </main>

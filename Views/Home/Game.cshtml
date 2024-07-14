@@ -1,9 +1,24 @@
 ﻿@{
     ViewBag.Title = "Game";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>game visual here...</p>
+<main>
+    <script>
+        function joinPlayerRedirect() {
+            var url = '@Url.Action("Index", "JoinPlayer")';
+            window.location.href = url;
+        }
+        function cashOutPlayerRedirect() {
+            var url = '@Url.Action("Index", "CashOutPlayer")';
+            window.location.href = url;
+        }
+        function endGameRedirect() {
+            var url = '@Url.Action("Index", "EndGame")';
+            window.location.href = url;
+        }
+    </script>
+
+    <button onclick="joinPlayerRedirect()">Join Player</button>
+    <button onclick="cashOutPlayerRedirect()">Cash Out Player</button>
+    <button onclick="endGameRedirect()">End Game</button>
 </main>

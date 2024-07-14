@@ -1,0 +1,38 @@
+@model PokerStatBoard.ViewModels.JoinPlayerVM
+@{
+    ViewBag.Title = "Add a New Player";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+
+    @using (Html.BeginForm("SubmitJoinPlayerForm", "JoinPlayer", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Join a player to the current game.</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="row">
+            @Html.LabelFor(m => m.SelectedToDoType, new { @class = "col-md-2 col-form-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.SelectedToDoType, PokerStatBoard.Logic.DropDownLogic.GetPlayerNames(), "--Select a player--")
+            </div>
+        </div>
+        <div class="row">
+            @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 col-form-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

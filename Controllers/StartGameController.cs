@@ -22,9 +22,9 @@ namespace PokerStatBoard.Controllers
                 dbContext.SaveChanges();
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // NO CURRENT GAME - redirect to home page
+            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // CURRENT GAME - redirect to game page for ongoing game
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Game", "Home");
             }
 
             PokerGameModel model = new PokerGameModel();

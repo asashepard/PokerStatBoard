@@ -15,15 +15,19 @@ namespace PokerStatBoard.Models
         public Guid PokerGameID { get; set; }
 
         [Required]
+        public Guid PlayerID { get; set; }
+
+        [Required]
         public decimal Amount { get; set; }
 
         [Required]
         public DateTime DateTime { get; set; }
 
-        public CashOutModel(Guid PokerGameID, decimal Amount)
+        public CashOutModel(Guid PokerGameID, Guid PlayerID, decimal Amount)
         {
             CashOutID = Guid.NewGuid();
             this.PokerGameID = PokerGameID;
+            this.PlayerID = PlayerID;
             this.Amount = Amount;
             DateTime = DateTime.Now;
         }

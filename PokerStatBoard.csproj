@@ -172,11 +172,13 @@
     <Compile Include="Controllers\AddPlayerController.cs" />
     <Compile Include="Controllers\EndGameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JoinPlayerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StartGameController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logic\DropDownLogic.cs" />
     <Compile Include="Migrations\202407140325008_InitialCreate.cs" />
     <Compile Include="Migrations\202407140325008_InitialCreate.Designer.cs">
       <DependentUpon>202407140325008_InitialCreate.cs</DependentUpon>
@@ -188,6 +190,10 @@
     <Compile Include="Migrations\202407140531079_Add-CurrentGame.cs" />
     <Compile Include="Migrations\202407140531079_Add-CurrentGame.Designer.cs">
       <DependentUpon>202407140531079_Add-CurrentGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407140638203_Reverse-Player-Action-Relations.cs" />
+    <Compile Include="Migrations\202407140638203_Reverse-Player-Action-Relations.Designer.cs">
+      <DependentUpon>202407140638203_Reverse-Player-Action-Relations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -201,6 +207,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AddPlayerVM.cs" />
+    <Compile Include="ViewModels\JoinPlayerVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -275,6 +282,7 @@
     <Content Include="Views\AddPlayer\Index.cshtml" />
     <Content Include="Views\StartGame\Index.cshtml" />
     <Content Include="Views\EndGame\Index.cshtml" />
+    <Content Include="Views\JoinPlayer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -315,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202407140531079_Add-CurrentGame.resx">
       <DependentUpon>202407140531079_Add-CurrentGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407140638203_Reverse-Player-Action-Relations.resx">
+      <DependentUpon>202407140638203_Reverse-Player-Action-Relations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
