@@ -170,6 +170,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddPlayerController.cs" />
+    <Compile Include="Controllers\EndGameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StartGameController.cs" />
@@ -269,6 +270,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\AddPlayer\Index.cshtml" />
     <Content Include="Views\StartGame\Index.cshtml" />
+    <Content Include="Views\EndGame\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
