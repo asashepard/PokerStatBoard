@@ -20,6 +20,7 @@ namespace PokerStatBoard.Models
         {
             PokerGameID = Guid.NewGuid();
             StartDateTime = DateTime.Now;
+            EndDateTime = DateTime.MaxValue;
         }
     }
 }

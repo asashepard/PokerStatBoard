@@ -8,6 +8,12 @@
             var url = '@Url.Action("Index", "AddPlayer")';
             window.location.href = url;
         }
+        function startGameRedirect() {
+            var url = '@Url.Action("Index", "StartGame")';
+            window.location.href = url;
+        }
     </script>
+
     <button onclick="addPlayerRedirect()">Create New Player</button>
+    <button onclick="startGameRedirect()">Start Game</button>
 </main>
