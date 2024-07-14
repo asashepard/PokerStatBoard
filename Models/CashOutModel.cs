@@ -23,6 +23,12 @@ namespace PokerStatBoard.Models
         [Required]
         public DateTime DateTime { get; set; }
 
+        public CashOutModel()
+        {
+            CashOutID = Guid.NewGuid();
+            DateTime = DateTime.Now;
+        }
+
         public CashOutModel(Guid PokerGameID, Guid PlayerID, decimal Amount)
         {
             CashOutID = Guid.NewGuid();

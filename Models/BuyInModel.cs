@@ -23,6 +23,12 @@ namespace PokerStatBoard.Models
         [Required]
         public DateTime DateTime { get; set; }
 
+        public BuyInModel()
+        {
+            BuyInID = Guid.NewGuid();
+            DateTime = DateTime.Now;
+        }
+
         public BuyInModel(Guid PokerGameID, Guid PlayerID, decimal Amount)
         {
             BuyInID = Guid.NewGuid();

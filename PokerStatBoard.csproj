@@ -170,6 +170,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddPlayerController.cs" />
+    <Compile Include="Controllers\CashOutPlayerController.cs" />
     <Compile Include="Controllers\EndGameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JoinPlayerController.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AddPlayerVM.cs" />
+    <Compile Include="ViewModels\CashOutPlayerVM.cs" />
     <Compile Include="ViewModels\JoinPlayerVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +285,7 @@
     <Content Include="Views\StartGame\Index.cshtml" />
     <Content Include="Views\EndGame\Index.cshtml" />
     <Content Include="Views\JoinPlayer\Index.cshtml" />
+    <Content Include="Views\CashOutPlayer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace PokerStatBoard.Controllers
 {
-    public class JoinPlayerController : Controller
+    public class CashOutPlayerController : Controller
     {
         public ActionResult Index()
         {
@@ -16,13 +16,13 @@ namespace PokerStatBoard.Controllers
         }
 
         [HttpPost]
-        public ActionResult SubmitJoinPlayerForm(JoinPlayerVM formData)
+        public ActionResult SubmitCashOutPlayerForm(CashOutPlayerVM formData)
         {
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
             bool success = Guid.TryParse(formData.Name, out var playerID);
 
-            if (!success) // Can't join player
+            if (!success) // Can't cash out player
             {
                 return RedirectToAction("Game", "Home");
             }
@@ -39,9 +39,9 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            BuyInModel model = new BuyInModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, formData.Amount);
+            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, formData.Amount);
 
-            dbContext.BuyIns.Add(model);
+            dbContext.CashOuts.Add(model);
 
             dbContext.SaveChanges();
 
