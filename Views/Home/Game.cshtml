@@ -2,8 +2,14 @@
     ViewBag.Title = "Game";
 }
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <main>
     <script>
+        function addPlayerRedirect() {
+            var url = '@Url.Action("Index", "AddPlayer")';
+            window.location.href = url;
+        }
         function joinPlayerRedirect() {
             var url = '@Url.Action("Index", "JoinPlayer")';
             window.location.href = url;
@@ -18,7 +24,152 @@
         }
     </script>
 
-    <button onclick="joinPlayerRedirect()">Join Player</button>
-    <button onclick="cashOutPlayerRedirect()">Cash Out Player</button>
-    <button onclick="endGameRedirect()">End Game</button>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: dimgray;
+        }
+
+        footer {
+            display: none;
+        }
+
+        .navbar {
+            height: 57px;
+            line-height: 57px;
+        }
+
+        .body-content {
+            height: calc(100vh - 57px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            height: 710px;
+            width: 100%;
+            min-width: 1000px;
+        }
+
+        .left, .center, .right {
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .left {
+            width: 33%;
+            background-color: darkgray;
+        }
+
+        .center {
+            width: 33%;
+            background-color: lightgray;
+        }
+
+        .right {
+            width: 33%;
+            background-color: darkgray;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .button {
+            height: fit-content;
+            width: 45%;
+            padding: 3px;
+            background-color: mediumpurple;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+
+        .button:hover {
+            background-color: rebeccapurple;
+            color: white;
+        }
+
+        .title-card {
+            font-size: 2.5rem;
+            background-color: rebeccapurple;
+            color: white;
+            border-radius: 5px;
+            height: 100px;
+            line-height: 100px;
+        }
+
+        .large-display {
+            font-size: 2.5rem;
+            font-family: monospace;
+            background-color: dimgray;
+            color: white;
+            border-radius: 5px;
+            height: 80px;
+            line-height: 80px;
+        }
+
+        .text-interim {
+            font-size: 1.5rem;
+        }
+    </style>
+
+    <div class="container">
+        <div class="left">
+            left
+        </div>
+        <div class="center">
+            <div class="title-card">
+                AP2™ Poker Live
+            </div>
+            <br />
+            <div class="text-interim">
+                Game Clock
+            </div>
+            <div class="large-display">
+                <!--PLACEHOLDER-->
+                01:23:45
+            </div>
+            <br />
+            <div class="text-interim">
+                On Table
+            </div>
+            <div class="large-display">
+                <!--PLACEHOLDER-->
+                $45.50
+            </div>
+            <br />
+            <div class="text-interim">
+                Avg. Stack
+            </div>
+            <div class="large-display">
+                <!--PLACEHOLDER-->
+                $4.55
+            </div>
+            <br />
+            <div class="button-container">
+                <div class="button" onclick="joinPlayerRedirect()">Join Player</div>
+                <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
+            </div>
+            <div class="button-container">
+                <div class="button" onclick="addPlayerRedirect()">Add New Player</div>
+                <div class="button" onclick="endGameRedirect()">End Game</div>
+            </div>
+        </div>
+        <div class="right">
+            right
+        </div>
+    </div>
+
+    <div></div>
 </main>
