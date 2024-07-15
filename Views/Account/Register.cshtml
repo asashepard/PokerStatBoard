@@ -4,13 +4,29 @@
 }
 
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <style>
+        body {
+            height: 100vh;
+            background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
+        }
+
+        footer {
+            display: none;
+        }
+
+        main {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+    </style>
+
+    <h2 id="title">@ViewBag.Title:</h2>
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
-        <hr />
+        <br />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
@@ -18,18 +34,21 @@
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
             </div>
         </div>
+        <br />
         <div class="row">
             @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             </div>
         </div>
+        <br />
         <div class="row">
             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
             </div>
         </div>
+        <br />
         <div class="row">
             <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Register" class="btn btn-outline-dark" />
