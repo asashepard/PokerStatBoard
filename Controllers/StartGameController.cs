@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace PokerStatBoard.Controllers
 {
+    [Authorize]
     public class StartGameController : Controller
     {
         public ActionResult Index()
