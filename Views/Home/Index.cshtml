@@ -1,19 +1,141 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
 <main>
-    <script>
-        function addPlayerRedirect() {
-            var url = '@Url.Action("Index", "AddPlayer")';
-            window.location.href = url;
+    <style>
+        body {
+            height: 100vh;
+            background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
         }
+
+        footer {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 53%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 200px;
+            max-height: 80%;
+            border-image: radial-gradient(ellipse at center, #e8d67d 60%, #a85be3) 1;
+            border-width: 4px;
+            border-style: solid;
+            background-color: #ededed;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            display: none;
+        }
+
+            .overlay.show {
+                display: block;
+            }
+
+        .button {
+            height: fit-content;
+            width: 45%;
+            padding: 3px;
+            color: #212529;
+            border-image: radial-gradient(ellipse at center, #e8d67d 60%, #a85be3) 1;
+            border-width: 4px;
+            border-style: solid;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            background: lightgray;
+            transition: ease-in 0.2s;
+        }
+
+            .button:hover {
+                background-color: #ededed;
+            }
+
+        #main-button {
+            font-size: 3rem;
+            position: fixed;
+            top: 53%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 200px;
+            background-color: rgba(211,211,211,0.4);
+            color: #212529;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+            #main-button:hover {
+                background-color: rgba(255,255,255,0.7);
+            }
+
+        .attribution {
+            font-size: 1.5rem;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .image {
+            position: center;
+            top: 0;
+            text-align: center;
+        }
+
+        img {
+            width: 500px;
+        }
+    </style>
+
+    <script>
         function startGameRedirect() {
             var url = '@Url.Action("Index", "StartGame")';
             window.location.href = url;
         }
+        function show(id) {
+            document.getElementById(id).style.display = "block";
+            document.getElementById('overlay').style.display = "block";
+        }
+        function hideVisibleModals() {
+            var modals = document.getElementsByClassName('modal');
+            for (var i = 0; i < modals.length; i++) {
+                modals[i].style.display = 'none';
+            }
+            document.getElementById('overlay').style.display = 'none';
+        }
     </script>
 
-    <button onclick="addPlayerRedirect()">Create New Player</button>
-    <button onclick="startGameRedirect()">Start Game</button>
+    <div id="overlay" class="overlay" onclick="hideVisibleModals()"></div>
+
+    <div class="image">
+        <img src="~/Images/extended_logo.png" />
+    </div>
+
+    <button class="button" id="main-button" onclick="show('confirmation')">Start Game</button>
+
+    <div class="modal" id="confirmation">
+        <h3>Are you sure?</h3>
+        <p>If a game is already in progress, you will be redirected to the ongoing game.</p>
+        <button class="button" onclick="startGameRedirect()">Yes</button>
+        <button class="button" onclick="hideVisibleModals()">No</button>
+    </div>
+
+    <div class="attribution">
+        ©@DateTime.Now.Year Asa Shepard
+    </div>
 </main>

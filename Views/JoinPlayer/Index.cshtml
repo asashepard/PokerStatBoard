@@ -1,36 +1,66 @@
 @model PokerStatBoard.ViewModels.JoinPlayerVM
 @{
-    ViewBag.Title = "Join a Player";
+    ViewBag.Title = "Buy a player into the current game";
 }
 
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <style>
+        body {
+            height: 100vh;
+            background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
+        }
 
-    @using (Html.BeginForm("SubmitJoinPlayerForm", "JoinPlayer", FormMethod.Post, new { role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <h4>Join a player to the current game.</h4>
-        <hr />
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Name, PokerStatBoard.Logic.DropDownLogic.GetPlayers(), "--Select a player--")
-            </div>
+        footer {
+            display: none;
+        }
+
+        .content {
+            width: 700px;
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .side-element {
+            width: 50%;
+        }
+    </style>
+
+    <div class="content">
+        <div class="side-element">
+            <h2 id="title">@ViewBag.Title:</h2>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
-            </div>
+        <div class="side-element">
+            @using (Html.BeginForm("SubmitJoinPlayerForm", "JoinPlayer", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <br />
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="row">
+                    @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(m => m.Name, PokerStatBoard.Logic.DropDownLogic.GetPlayers(), "--Select a player--")
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="offset-md-2 col-md-10">
+                        <input type="submit" value="Confirm" class="btn btn-outline-dark" />
+                    </div>
+                </div>
+            }
         </div>
-        <br />
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Submit" class="btn btn-outline-dark" />
-            </div>
-        </div>
-    }
+    </div>
 </main>
 
 @section Scripts {

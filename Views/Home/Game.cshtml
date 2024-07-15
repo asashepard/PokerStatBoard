@@ -2,8 +2,16 @@
     ViewBag.Title = "Game";
 }
 
-<main>
-    <script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div id="overlay" class="overlay" onclick="hideVisibleModals()"></div>
+<body onload="stopWatch()">
+    <main>
+        <script>
+        function addPlayerRedirect() {
+            var url = '@Url.Action("Index", "AddPlayer")';
+            window.location.href = url;
+        }
         function joinPlayerRedirect() {
             var url = '@Url.Action("Index", "JoinPlayer")';
             window.location.href = url;
@@ -16,9 +24,330 @@
             var url = '@Url.Action("Index", "EndGame")';
             window.location.href = url;
         }
-    </script>
+        let hour = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Hours);
+        let minute = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Minutes);
+        let second = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Seconds);
+        function stopWatch() {
+            second++;
+            if (second == 60) {
+                minute += 1;
+                second = 0;
+                setTimeout(location.reload(), 2000);
+            }
+            let hrString = hour;
+            let minString = minute;
+            let secString = second;
+            if (hour < 10) {
+                hrString = "0" + hrString;
+            }
+            if (minute < 10) {
+                minString = "0" + minString;
+            }
+            if (second < 10) {
+                secString = "0" + secString;
+            }
+            document.getElementById('hr').innerHTML = hrString;
+            document.getElementById('min').innerHTML = minString;
+            document.getElementById('sec').innerHTML = secString;
+            setTimeout(stopWatch, 1000);
+            }
+            function show(id) {
+                document.getElementById(id).style.display = "block";
+                document.getElementById('overlay').style.display = "block";
+            }
+            function hideVisibleModals() {
+                var modals = document.getElementsByClassName('modal');
+                for (var i = 0; i < modals.length; i++) {
+                    modals[i].style.display = 'none';
+                }
+                document.getElementById('overlay').style.display = 'none';
+            }
+        </script>
 
-    <button onclick="joinPlayerRedirect()">Join Player</button>
-    <button onclick="cashOutPlayerRedirect()">Cash Out Player</button>
-    <button onclick="endGameRedirect()">End Game</button>
-</main>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
+            }
+
+            footer {
+                display: none;
+            }
+
+            .navbar {
+                height: 57px;
+                line-height: 57px;
+            }
+
+            .body-content {
+                height: calc(100vh - 57px);
+                display: flex;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+                flex-direction: column;
+            }
+
+            .container {
+                display: flex;
+                flex: 1;
+                height: 710px;
+                width: 2000px;
+                min-width: 1000px;
+                z-index: 0;
+            }
+
+            .left, .center, .right {
+                padding: 20px;
+                box-sizing: border-box;
+                text-align: center;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .left, .right {
+                width: 33%;
+                background-color: rgba(169,169,169,0.3);
+            }
+
+            .center {
+                width: 33%;
+                background-color: rgba(211,211,211,0.6);
+                z-index: 2;
+            }
+
+            .button-container {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .button {
+                height: fit-content;
+                width: 45%;
+                padding: 3px;
+                color: black;
+                border-image: radial-gradient(ellipse at center, #e8d67d 60%, #a85be3) 1;
+                border-width: 4px;
+                border-style: solid;
+                text-align: center;
+                cursor: pointer;
+                user-select: none;
+                transition: ease-in 0.15s;
+                z-index: 9999;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+                .button:hover {
+                    background-color: #ededed;
+                }
+
+            #modal_button {
+                background: lightgray;
+            }
+
+                #modal_button:hover {
+                    background-color: #ededed;
+                }
+
+            .title-card {
+                font-size: 2.5rem;
+                border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
+                border-width: 6px;
+                border-style: solid;
+                background-color: rgba(211,211,211,0.4);
+                height: 100px;
+                line-height: 90px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .subtitle-card {
+                font-size: 1.8rem;
+                background-color: rgba(211,211,211,0.4);
+                border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
+                border-width: 5px;
+                border-style: solid;
+                height: 70px;
+                margin: 1px;
+                line-height: 60px;
+                margin-bottom: 15px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .large-display {
+                font-size: 2.5rem;
+                font-family: monospace;
+                font-weight: 100;
+                background-color: rgba(105,105,105,0.4);
+                color: #212121;
+                height: 80px;
+                line-height: 80px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .text-interim {
+                font-size: 1.5rem;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            td {
+                padding: 8px;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 54%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 500px;
+                height: 180px;
+                max-height: 80%;
+                border-image: radial-gradient(ellipse at center, #e8d67d 60%, #a85be3) 1;
+                border-width: 4px;
+                border-style: solid;
+                background-color: #ededed;
+                padding: 20px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                text-align: center;
+            }
+
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 999;
+                display: none;
+            }
+
+                .overlay.show {
+                    display: block;
+                }
+        </style>
+
+        <div class="container">
+            <div class="left">
+                <div class="subtitle-card">
+                    Buy-Ins
+                </div>
+                <div style="overflow:scroll;height:250px">
+                    <table>
+                        <tbody>
+                            @foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns())
+                            {
+                                <tr>
+                                    <td style="text-align: left">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                    <td style="text-align: left">@PokerStatBoard.Logic.GeneralLogic.getPlayer(buyIn.PlayerID).Name</td>
+                                    <td style="text-align: right">$@buyIn.Amount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="subtitle-card">
+                    Cash-Outs
+                </div>
+                <div style="overflow:scroll;height:200px">
+                    <table>
+                        <tbody>
+                            @foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts())
+                            {
+                                <tr>
+                                    <td style="text-align: left">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                    <td style="text-align: left">@PokerStatBoard.Logic.GeneralLogic.getPlayer(cashOut.PlayerID).Name</td>
+                                    <td style="text-align: right">$@cashOut.Amount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="center">
+                <div class="title-card">
+                    AP3 Poker Live
+                </div>
+                <br />
+                <div class="text-interim">
+                    Game Clock
+                </div>
+                <div class="large-display" id="time">
+                    <span class="digit" id="hr">
+                        00
+                    </span>
+                    <span>
+                        :
+                    </span>
+                    <span class="digit" id="min">
+                        00
+                    </span>
+                    <span>
+                        :
+                    </span>
+                    <span class="digit" id="sec">
+                        00
+                    </span>
+                </div>
+                <br />
+                <div class="text-interim">
+                    On Table
+                </div>
+                <div class="large-display">
+                    $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2, MidpointRounding.ToEven))
+                </div>
+                <br />
+                <div class="text-interim">
+                    Avg. Stack
+                </div>
+                <div class="large-display">
+                    $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2, MidpointRounding.ToEven))
+                </div>
+                <br />
+                <div class="button-container">
+                    <div class="button" onclick="joinPlayerRedirect()">Buy In Player</div>
+                    <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
+                </div>
+                <div class="button-container">
+                    <div class="button" onclick="addPlayerRedirect()">Add New Player</div>
+                    <div class="button" onclick="show('confirmation')">End Game</div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="subtitle-card">
+                    At Table
+                </div>
+                <table>
+                    <tbody>
+                        @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
+                        {
+                            <tr>
+                                <td style="text-align: left">@player.Name</td>
+                                <td style="text-align: right">$@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal" id="confirmation">
+            <h3>Are you sure?</h3>
+            <p>If you end the game, your action cannot be undone.</p>
+            <button id="modal_button" class="button" onclick="endGameRedirect()">Yes</button>
+            <button id="modal_button" class="button" onclick="hideVisibleModals()">No</button>
+        </div>
+    </main>
+</body>
