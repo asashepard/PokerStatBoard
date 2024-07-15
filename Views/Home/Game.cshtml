@@ -52,7 +52,7 @@
             display: flex;
             flex: 1;
             height: 710px;
-            width: 100%;
+            width: 2000px;
             min-width: 1000px;
         }
 
@@ -101,12 +101,22 @@
         }
 
         .title-card {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             background-color: rebeccapurple;
             color: white;
             border-radius: 5px;
             height: 100px;
             line-height: 100px;
+        }
+
+        .subtitle-card {
+            font-size: 1.8rem;
+            background-color: lightgray;
+            border: 5px solid rebeccapurple;
+            border-radius: 5px;
+            height: 70px;
+            line-height: 60px;
+            margin-bottom: 15px;
         }
 
         .large-display {
@@ -122,15 +132,56 @@
         .text-interim {
             font-size: 1.5rem;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
     </style>
 
     <div class="container">
         <div class="left">
-            left
+            <div class="subtitle-card">
+                Buy-Ins
+            </div>
+            <table>
+                <tbody>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <tr>
+                            <td style="text-align: left">00:00:00</td>
+                            <td style="text-align: left">Player @i</td>
+                            <td>$0.00</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <div class="subtitle-card">
+                Cash-Outs
+            </div>
+            <table>
+                <tbody>
+                    @for (int i = 0; i < 4; i++)
+                    {
+                        <tr>
+                            <td style="text-align: left">00:00:00</td>
+                            <td style="text-align: left">Player @i</td>
+                            <td>$0.00</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
         <div class="center">
             <div class="title-card">
-                AP2™ Poker Live
+                AP3™ Poker Live
             </div>
             <br />
             <div class="text-interim">
@@ -167,7 +218,20 @@
             </div>
         </div>
         <div class="right">
-            right
+            <div class="subtitle-card">
+                At Table / Total In
+            </div>
+            <table>
+                <tbody>
+                    @for (int i = 1; i <= 8; i++)
+                    {
+                        <tr style="height:73px">
+                            <td style="text-align: left">Player @i</td>
+                            <td>$0.00</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 
