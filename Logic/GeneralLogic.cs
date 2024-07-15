@@ -220,6 +220,33 @@ namespace PokerStatBoard.Logic
             return amount;
         }
 
+        public static decimal getPlusMinus(Guid playerID, Guid gameID)
+        {
+            decimal amount = 0;
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            foreach (BuyInModel buyIn in dbContext.BuyIns)
+            {
+                if (buyIn.PlayerID != playerID || buyIn.PokerGameID != gameID) // exclude changes from current game
+                {
+                    continue;
+                }
+                amount -= buyIn.Amount;
+            }
+
+            foreach (CashOutModel cashOut in dbContext.CashOuts)
+            {
+                if (cashOut.PlayerID != playerID || cashOut.PokerGameID != gameID) // exclude changes from current game
+                {
+                    continue;
+                }
+                amount += cashOut.Amount;
+            }
+
+            return amount;
+        }
+
         public static decimal getBoughtIn(Guid playerID)
         {
             decimal amount = 0;
@@ -229,6 +256,24 @@ namespace PokerStatBoard.Logic
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
                 if (buyIn.PlayerID != playerID)
+                {
+                    continue;
+                }
+                amount += buyIn.Amount;
+            }
+
+            return amount;
+        }
+
+        public static decimal getBoughtIn(Guid playerID, Guid gameID)
+        {
+            decimal amount = 0;
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            foreach (BuyInModel buyIn in dbContext.BuyIns)
+            {
+                if (buyIn.PlayerID != playerID || buyIn.PokerGameID != gameID)
                 {
                     continue;
                 }
@@ -256,6 +301,24 @@ namespace PokerStatBoard.Logic
             return amount;
         }
 
+        public static decimal getCashedOut(Guid playerID, Guid gameID)
+        {
+            decimal amount = 0;
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            foreach (CashOutModel cashOut in dbContext.CashOuts)
+            {
+                if (cashOut.PlayerID != playerID || cashOut.PokerGameID != gameID)
+                {
+                    continue;
+                }
+                amount += cashOut.Amount;
+            }
+
+            return amount;
+        }
+
         public static List<Guid> getGamesPlayed(Guid playerID)
         {
             List<Guid> pokerGameIds = new List<Guid>();
@@ -272,6 +335,29 @@ namespace PokerStatBoard.Logic
             }
 
             return pokerGameIds;
+        }
+
+        public static List<PokerGameModel> getGameModels(List<Guid> pokerGameIds)
+        {
+            List<PokerGameModel> games = new List<PokerGameModel>();
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            foreach (PokerGameModel model in dbContext.PokerGames)
+            {
+                if (!pokerGameIds.Contains(model.PokerGameID))
+                {
+                    continue;
+                }
+                games.Add(model);
+            }
+
+            games.Sort((PokerGameModel a, PokerGameModel b) =>
+            {
+                return b.StartDateTime.CompareTo(a.StartDateTime);
+            });
+
+            return games;
         }
 
         public static TimeSpan getTimePlayed(Guid playerID)
@@ -349,6 +435,133 @@ namespace PokerStatBoard.Logic
             }
 
             return result;
+        }
+
+        public static TimeSpan getTimePlayed(Guid playerID, Guid gameID)
+        {
+            List<TimeSpan> periodsPlayed = new List<TimeSpan>();
+            List<BuyInModel> allBuyIns = new List<BuyInModel>();
+            List<CashOutModel> allCashOuts = new List<CashOutModel>();
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            // populate all buy ins and sort by DateTime
+            foreach (BuyInModel buyIn in dbContext.BuyIns)
+            {
+                if (buyIn.PlayerID != playerID || buyIn.PokerGameID != gameID)
+                {
+                    continue;
+                }
+                allBuyIns.Add(buyIn);
+            }
+            allBuyIns.Sort((BuyInModel a, BuyInModel b) =>
+            {
+                return a.DateTime.CompareTo(b.DateTime);
+            });
+            foreach (CashOutModel cashOut in dbContext.CashOuts)
+            {
+                if (cashOut.PlayerID != playerID || cashOut.PokerGameID != gameID)
+                {
+                    continue;
+                }
+                allCashOuts.Add(cashOut);
+            }
+            allCashOuts.Sort((CashOutModel a, CashOutModel b) =>
+            {
+                return a.DateTime.CompareTo(b.DateTime);
+            });
+
+            // scan the produced lists
+            DateTime lastTime = DateTime.MinValue;
+
+            foreach (BuyInModel buyIn in allBuyIns)
+            {
+                // if past DateTime threshold, set threshold
+                if (buyIn.DateTime > lastTime)
+                {
+                    lastTime = buyIn.DateTime;
+                }
+                else
+                {
+                    continue;
+                }
+
+                foreach (CashOutModel cashOut in allCashOuts)
+                {
+                    // if past DateTime threshold, add to periods played and set threshold and break
+                    if (cashOut.DateTime > lastTime)
+                    {
+                        TimeSpan timeSpan = cashOut.DateTime - lastTime;
+                        periodsPlayed.Add(timeSpan);
+                        lastTime = cashOut.DateTime;
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            // final calculation
+            TimeSpan result = TimeSpan.Zero;
+
+            foreach (TimeSpan t in periodsPlayed)
+            {
+                result += t;
+            }
+
+            return result;
+        }
+
+        public static decimal getGreatestGain(Guid playerId)
+        {
+            decimal greatest = 0;
+            
+            foreach (PokerGameModel game in getGameModels(getGamesPlayed(playerId)))
+            {
+                decimal candidate = getPlusMinus(playerId, game.PokerGameID);
+
+                if (candidate > greatest)
+                {
+                    greatest = candidate;
+                }
+            }
+
+            return greatest;
+        }
+
+        public static decimal getGreatestLoss(Guid playerId)
+        {
+            decimal greatest = 0;
+
+            foreach (PokerGameModel game in getGameModels(getGamesPlayed(playerId)))
+            {
+                decimal candidate = getPlusMinus(playerId, game.PokerGameID);
+
+                if (candidate < greatest)
+                {
+                    greatest = candidate;
+                }
+            }
+
+            return greatest;
+        }
+
+        public static decimal getWinRate(Guid playerId)
+        {
+            List<Guid> gamesPlayed = getGamesPlayed(playerId);
+
+            if (gamesPlayed.Count == 0)
+            {
+                return 0;
+            }
+
+            int gamesWon = gamesPlayed.Count(game => getPlusMinus(playerId, game) > 0);
+
+            decimal winRate = (decimal) gamesWon / gamesPlayed.Count;
+
+            return winRate;
         }
     }
 }
