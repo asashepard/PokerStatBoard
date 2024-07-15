@@ -16,7 +16,7 @@
         .modal {
             display: none;
             position: fixed;
-            top: 50%;
+            top: 54%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 500px;
@@ -67,9 +67,9 @@
             }
 
         #main-button {
-            font-size: 4rem;
+            font-size: 3rem;
             position: fixed;
-            top: 50%;
+            top: 54%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 500px;
@@ -86,10 +86,20 @@
         .attribution {
             font-size: 1.5rem;
             position: absolute;
-            bottom: 0;
+            bottom: 20px;
             left: 50%;
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
+        }
+
+        .image {
+            position: center;
+            top: 0;
+            text-align: center;
+        }
+
+        img {
+            width: 500px;
         }
     </style>
 
@@ -112,6 +122,10 @@
     </script>
 
     <div id="overlay" class="overlay" onclick="hideVisibleModals()"></div>
+
+    <div class="image">
+        <img src="~/Images/extended_logo.png" />
+    </div>
 
     <button class="button" id="main-button" onclick="show('confirmation')">Start Game</button>
 
