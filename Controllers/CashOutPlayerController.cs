@@ -1,4 +1,5 @@
-﻿using PokerStatBoard.Models;
+﻿using PokerStatBoard.Logic;
+using PokerStatBoard.Models;
 using PokerStatBoard.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,16 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, formData.Amount);
+            decimal amount = formData.Amount;
+
+            decimal onTable = GeneralLogic.getAmountOnTable();
+
+            if (amount > onTable)
+            {
+                amount = onTable;
+            }
+
+            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, amount);
 
             dbContext.CashOuts.Add(model);
 

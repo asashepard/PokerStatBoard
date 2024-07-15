@@ -39,17 +39,19 @@
             {
                 @Html.AntiForgeryToken()
                 <br />
-                @Html.ValidationSummary("", new { @class = "text-danger" })
                 <div class="row">
                     @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
                     <div class="col-md-10">
                         @Html.DropDownListFor(m => m.Name, PokerStatBoard.Logic.DropDownLogic.GetPlayersCurrentlyPlaying(), "--Select a player--")
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="row">
                     @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 col-form-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+                        Left on table: $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2)
+                        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <br />
