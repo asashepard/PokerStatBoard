@@ -292,6 +292,7 @@
     <Content Include="Views\EndGame\Index.cshtml" />
     <Content Include="Views\JoinPlayer\Index.cshtml" />
     <Content Include="Views\CashOutPlayer\Index.cshtml" />
+    <Content Include="Views\Home\Leaderboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

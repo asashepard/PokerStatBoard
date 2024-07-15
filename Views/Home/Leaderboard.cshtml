@@ -1,0 +1,155 @@
+@{
+    ViewBag.Title = "Leaderboard";
+}
+
+<body onload="sortTable(1)">
+    <main>
+        <style>
+            body {
+                height: 100vh;
+                background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
+            }
+
+            footer {
+                display: none;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th {
+                background-color: rgba(211,211,211,0.4);
+                cursor: pointer;
+                user-select: none;
+                transition: ease-in 0.15s;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                padding: 10px;
+            }
+
+                th:hover {
+                    background-color: rgba(211,211,211,0.7);
+                }
+
+            th, td {
+                padding: 8px;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+
+            .title-card {
+                font-size: 2.5rem;
+                position: relative;
+                top: 50px;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
+                border-width: 6px;
+                border-style: solid;
+                background-color: rgba(211,211,211,0.9);
+                width: 30%;
+                height: 100px;
+                line-height: 90px;
+                margin: 20px;
+                text-align: center;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+        </style>
+
+        <script>
+            lastId = 0;
+            function sortTable(column) {
+                document.getElementById(column).style.background = "rgba(211,211,211,0.9)";
+                document.getElementById(lastId).style.background = "rgba(211,211,211,0.4)";
+                lastId = column;
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById("leaderboard");
+                switching = true;
+                /* Make a loop that will continue until
+                no switching has been done: */
+                while (switching) {
+                    // Start by saying: no switching is done:
+                    switching = false;
+                    rows = table.rows;
+                    /* Loop through all table rows (except the
+                    first, which contains table headers): */
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        // Start by saying there should be no switching:
+                        shouldSwitch = false;
+                        /* Get the two elements you want to compare,
+                        one from current row and one from the next: */
+                        x = rows[i].getElementsByTagName("td")[column];
+                        y = rows[i + 1].getElementsByTagName("td")[column];
+                        // Check if the two rows should switch place:
+                        var x_val = parseFloat(x.innerHTML.replaceAll(":",""));
+                        var y_val = parseFloat(y.innerHTML.replaceAll(":",""));
+                        if (x_val == NaN || y_val == NaN) {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                // If so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                        else {
+                            if (x_val < y_val) {
+                                // If so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (shouldSwitch) {
+                        /* If a switch has been marked, make the switch
+                        and mark that a switch has been done: */
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+        </script>
+
+        <div>
+            <div class="title-card">
+                Leaderboard
+            </div>
+            <table class="custom-table" id="leaderboard">
+                <tr>
+                    <th id="0" onclick="sortTable(0)">Name</th>
+                    <th id="1" onclick="sortTable(1)">$ +/- Overall</th>
+                    <th id="2" onclick="sortTable(2)">$ Bought</th>
+                    <th id="3" onclick="sortTable(3)">$ Cashed</th>
+                    <th id="4" onclick="sortTable(4)"># Games</th>
+                    <th id="5" onclick="sortTable(5)">Time Played</th>
+                    <th id="6" onclick="sortTable(6)">$ +/- per Hour</th>
+                </tr>
+                @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getAllPlayers())
+                {
+                    <tr>
+                        <td>
+                            @player.Name
+                        </td>
+                        <td>
+                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)
+                        </td>
+                        <td>
+                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)
+                        </td>
+                        <td>
+                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)
+                        </td>
+                        <td>
+                            @PokerStatBoard.Logic.GeneralLogic.getGamesPlayed(player.PlayerID).Count
+                        </td>
+                        <td>
+                            @PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]
+                        </td>
+                        <td>
+                            @(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </main>
+</body>

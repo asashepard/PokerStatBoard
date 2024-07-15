@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PokerStatBoard.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,8 +16,18 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Game()
         {
-            ViewBag.Message = "Game page";
+            ApplicationDbContext dbContext = new ApplicationDbContext();
 
+            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - redirect to home page
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        public ActionResult Leaderboard()
+        {
             return View();
         }
     }
