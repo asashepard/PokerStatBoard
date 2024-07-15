@@ -51,6 +51,7 @@
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
                         Left on table: $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2)
+                        <p>Note - Amount may be altered to prevent leaving money without any players or to prevent a player cashing for more than is left</p>
                         @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
                     </div>
                 </div>
