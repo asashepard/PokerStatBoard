@@ -4,8 +4,9 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<main>
-    <script>
+<body onload="stopWatch()">
+    <main>
+        <script>
         function addPlayerRedirect() {
             var url = '@Url.Action("Index", "AddPlayer")';
             window.location.href = url;
@@ -22,215 +23,262 @@
             var url = '@Url.Action("Index", "EndGame")';
             window.location.href = url;
         }
-    </script>
-
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            background-color: dimgray;
+        let hour = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Hours);
+        let minute = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Minutes);
+        let second = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Seconds);
+        function stopWatch() {
+            second++;
+            if (second == 60) {
+                minute += 1;
+                second = 0;
+                setTimeout(location.reload(), 2000);
+            }
+            let hrString = hour;
+            let minString = minute;
+            let secString = second;
+            if (hour < 10) {
+                hrString = "0" + hrString;
+            }
+            if (minute < 10) {
+                minString = "0" + minString;
+            }
+            if (second < 10) {
+                secString = "0" + secString;
+            }
+            document.getElementById('hr').innerHTML = hrString;
+            document.getElementById('min').innerHTML = minString;
+            document.getElementById('sec').innerHTML = secString;
+            setTimeout(stopWatch, 1000);
         }
+        </script>
 
-        footer {
-            display: none;
-        }
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                background-color: dimgray;
+            }
 
-        .navbar {
-            height: 57px;
-            line-height: 57px;
-        }
+            footer {
+                display: none;
+            }
 
-        .body-content {
-            height: calc(100vh - 57px);
-            display: flex;
-            flex-direction: column;
-        }
+            .navbar {
+                height: 57px;
+                line-height: 57px;
+            }
 
-        .container {
-            display: flex;
-            flex: 1;
-            height: 710px;
-            width: 2000px;
-            min-width: 1000px;
-        }
+            .body-content {
+                height: calc(100vh - 57px);
+                display: flex;
+                flex-direction: column;
+            }
 
-        .left, .center, .right {
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-        }
+            .container {
+                display: flex;
+                flex: 1;
+                height: 710px;
+                width: 2000px;
+                min-width: 1000px;
+                z-index: 0;
+            }
 
-        .left {
-            width: 33%;
-            background-color: darkgray;
-        }
+            .left, .center, .right {
+                padding: 20px;
+                box-sizing: border-box;
+                text-align: center;
+            }
 
-        .center {
-            width: 33%;
-            background-color: lightgray;
-        }
+            .left {
+                width: 33%;
+                background-color: darkgray;
+            }
 
-        .right {
-            width: 33%;
-            background-color: darkgray;
-        }
+            .center {
+                width: 33%;
+                background-color: lightgray;
+            }
 
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+            .right {
+                width: 33%;
+                background-color: darkgray;
+            }
 
-        .button {
-            height: fit-content;
-            width: 45%;
-            padding: 3px;
-            background-color: mediumpurple;
-            text-align: center;
-            cursor: pointer;
-            user-select: none;
-            border-radius: 5px;
-            z-index: 9999;
-        }
+            .button-container {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
 
-        .button:hover {
-            background-color: rebeccapurple;
-            color: white;
-        }
+            .button {
+                height: fit-content;
+                width: 45%;
+                padding: 3px;
+                background-color: mediumpurple;
+                text-align: center;
+                cursor: pointer;
+                user-select: none;
+                border-radius: 5px;
+                z-index: 9999;
+            }
 
-        .title-card {
-            font-size: 2.2rem;
-            background-color: rebeccapurple;
-            color: white;
-            border-radius: 5px;
-            height: 100px;
-            line-height: 100px;
-        }
+                .button:hover {
+                    background-color: rebeccapurple;
+                    color: white;
+                }
 
-        .subtitle-card {
-            font-size: 1.8rem;
-            background-color: lightgray;
-            border: 5px solid rebeccapurple;
-            border-radius: 5px;
-            height: 70px;
-            line-height: 60px;
-            margin-bottom: 15px;
-        }
+            .title-card {
+                font-size: 2.2rem;
+                background-color: rebeccapurple;
+                color: white;
+                border-radius: 5px;
+                height: 100px;
+                line-height: 100px;
+            }
 
-        .large-display {
-            font-size: 2.5rem;
-            font-family: monospace;
-            background-color: dimgray;
-            color: white;
-            border-radius: 5px;
-            height: 80px;
-            line-height: 80px;
-        }
+            .subtitle-card {
+                font-size: 1.8rem;
+                background-color: lightgray;
+                border: 5px solid rebeccapurple;
+                border-radius: 5px;
+                height: 70px;
+                line-height: 60px;
+                margin-bottom: 15px;
+            }
 
-        .text-interim {
-            font-size: 1.5rem;
-        }
+            .large-display {
+                font-size: 2.5rem;
+                font-family: monospace;
+                background-color: dimgray;
+                color: white;
+                border-radius: 5px;
+                height: 80px;
+                line-height: 80px;
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+            .text-interim {
+                font-size: 1.5rem;
+            }
 
-        td {
-            padding: 8px;
-            text-align: center;
-            font-size: 1.5rem;
-        }
-    </style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
 
-    <div class="container">
-        <div class="left">
-            <div class="subtitle-card">
-                Buy-Ins
+            td {
+                padding: 8px;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+        </style>
+
+        <div class="container">
+            <div class="left">
+                <div class="subtitle-card">
+                    Recent Buy-Ins
+                </div>
+                <div style="overflow:hidden;height:250px">
+                    <table>
+                        <tbody>
+                            @foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns())
+                            {
+                                <tr>
+                                    <td style="text-align: left">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                    <td style="text-align: left">@PokerStatBoard.Logic.GeneralLogic.getPlayer(buyIn.PlayerID).Name</td>
+                                    <td style="text-align: right">$@buyIn.Amount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="subtitle-card">
+                    Recent Cash-Outs
+                </div>
+                <div style="overflow:hidden;height:200px">
+                    <table>
+                        <tbody>
+                            @foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts())
+                            {
+                                <tr>
+                                    <td style="text-align: left">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                    <td style="text-align: left">@PokerStatBoard.Logic.GeneralLogic.getPlayer(cashOut.PlayerID).Name</td>
+                                    <td style="text-align: right">$@cashOut.Amount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <table>
-                <tbody>
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <tr>
-                            <td style="text-align: left">00:00:00</td>
-                            <td style="text-align: left">Player @i</td>
-                            <td>$0.00</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <br />
-            <div class="subtitle-card">
-                Cash-Outs
+            <div class="center">
+                <div class="title-card">
+                    AP3™ Poker Live
+                </div>
+                <br />
+                <div class="text-interim">
+                    Game Clock
+                </div>
+                <div class="large-display" id="time">
+                    <span class="digit" id="hr">
+                        00
+                    </span>
+                    <span>
+                        :
+                    </span>
+                    <span class="digit" id="min">
+                        00
+                    </span>
+                    <span>
+                        :
+                    </span>
+                    <span class="digit" id="sec">
+                        00
+                    </span>
+                </div>
+                <br />
+                <div class="text-interim">
+                    On Table
+                </div>
+                <div class="large-display">
+                    $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2, MidpointRounding.ToEven))
+                </div>
+                <br />
+                <div class="text-interim">
+                    Avg. Stack
+                </div>
+                <div class="large-display">
+                    $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2, MidpointRounding.ToEven))
+                </div>
+                <br />
+                <div class="button-container">
+                    <div class="button" onclick="joinPlayerRedirect()">Buy In Player</div>
+                    <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
+                </div>
+                <div class="button-container">
+                    <div class="button" onclick="addPlayerRedirect()">Add New Player</div>
+                    <div class="button" onclick="endGameRedirect()">End Game</div>
+                </div>
             </div>
-            <table>
-                <tbody>
-                    @for (int i = 0; i < 4; i++)
-                    {
-                        <tr>
-                            <td style="text-align: left">00:00:00</td>
-                            <td style="text-align: left">Player @i</td>
-                            <td>$0.00</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <div class="right">
+                <div class="subtitle-card">
+                    At Table / Total In
+                </div>
+                <table>
+                    <tbody>
+                        @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
+                        {
+                            <tr>
+                                <td style="text-align: left">@player.Name</td>
+                                <td style="text-align: right">$@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="center">
-            <div class="title-card">
-                AP3™ Poker Live
-            </div>
-            <br />
-            <div class="text-interim">
-                Game Clock
-            </div>
-            <div class="large-display">
-                01:23:45
-            </div>
-            <br />
-            <div class="text-interim">
-                On Table
-            </div>
-            <div class="large-display">
-                $@PokerStatBoard.Logic.GeneralLogic.getAmountOnTable()
-            </div>
-            <br />
-            <div class="text-interim">
-                Avg. Stack
-            </div>
-            <div class="large-display">
-                $@(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count))
-            </div>
-            <br />
-            <div class="button-container">
-                <div class="button" onclick="joinPlayerRedirect()">Join Player</div>
-                <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
-            </div>
-            <div class="button-container">
-                <div class="button" onclick="addPlayerRedirect()">Add New Player</div>
-                <div class="button" onclick="endGameRedirect()">End Game</div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="subtitle-card">
-                At Table / Total In
-            </div>
-            <table>
-                <tbody>
-                    @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
-                    {
-                        <tr style="height:73px">
-                            <td style="text-align: left">@player.Name</td>
-                            <td>$@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <div></div>
-</main>
+        <div></div>
+    </main>
+</body>

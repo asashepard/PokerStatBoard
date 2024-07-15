@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 
 namespace PokerStatBoard.Logic
@@ -49,7 +50,7 @@ namespace PokerStatBoard.Logic
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return null
+            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
             {
                 return players;
             }
@@ -99,6 +100,80 @@ namespace PokerStatBoard.Logic
             }
 
             return amount;
+        }
+
+        public static List<BuyInModel> getCurrentBuyIns()
+        {
+            List<BuyInModel> buyInModels = new List<BuyInModel>();
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
+            {
+                return buyInModels;
+            }
+
+            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
+
+            foreach (BuyInModel buyIn in dbContext.BuyIns)
+            {
+                if (buyIn.PokerGameID != currentGame)
+                {
+                    continue;
+                }
+                buyInModels.Add(buyIn);
+            }
+
+            buyInModels.Sort((BuyInModel a, BuyInModel b) =>
+            {
+                return b.DateTime.CompareTo(a.DateTime);
+            });
+
+            return buyInModels;
+        }
+
+        public static List<CashOutModel> getCurrentCashOuts()
+        {
+            List<CashOutModel> cashOutModels = new List<CashOutModel>();
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
+            {
+                return cashOutModels;
+            }
+
+            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
+
+            foreach (CashOutModel cashOut in dbContext.CashOuts)
+            {
+                if (cashOut.PokerGameID != currentGame)
+                {
+                    continue;
+                }
+                cashOutModels.Add(cashOut);
+            }
+
+            cashOutModels.Sort((CashOutModel a, CashOutModel b) =>
+            {
+                return b.DateTime.CompareTo(a.DateTime);
+            });
+
+            return cashOutModels;
+        }
+
+        public static PokerGameModel getCurrentGame()
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.PokerGames.FirstOrDefault(g => g.PokerGameID == context.CurrentGame.FirstOrDefault().PokerGameID);
+        }
+
+        public static PlayerModel getPlayer(Guid playerID)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.Players.FirstOrDefault(p => p.PlayerID == playerID);
         }
     }
 }
