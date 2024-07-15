@@ -22,13 +22,21 @@ namespace PokerStatBoard.Controllers
         {
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
+            foreach (PlayerModel player in dbContext.Players)
+            {
+                if (player.Name == formData.Name) // Name already exists
+                {
+                    return RedirectToAction("Game", "Home");
+                }
+            }
+
             PlayerModel model = new PlayerModel(formData.Name);
 
             dbContext.Players.Add(model);
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Game", "Home");
         }
     }
 }
