@@ -50,11 +50,11 @@
             @using (Html.BeginForm("SubmitAddPlayerForm", "AddPlayer", FormMethod.Post, new { role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary("", new { @class = "text-danger" })
                 <div class="row">
                     @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger"})
                     </div>
                 </div>
                 <br />

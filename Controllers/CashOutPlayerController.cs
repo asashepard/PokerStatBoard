@@ -1,7 +1,9 @@
-﻿using PokerStatBoard.Models;
+﻿using PokerStatBoard.Logic;
+using PokerStatBoard.Models;
 using PokerStatBoard.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -39,7 +41,21 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, formData.Amount);
+            decimal amount = formData.Amount;
+
+            decimal onTable = GeneralLogic.getAmountOnTable();
+
+            if (amount > onTable)
+            {
+                amount = onTable; // prevent cashing out for more than is on table
+            }
+
+            if (GeneralLogic.getCurrentPlayers().Count == 1)
+            {
+                amount = onTable; // make sure all money is accounted for by giving remainder to last player
+            }
+
+            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, amount);
 
             dbContext.CashOuts.Add(model);
 
