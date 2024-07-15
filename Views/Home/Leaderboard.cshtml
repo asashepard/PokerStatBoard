@@ -28,10 +28,6 @@
                 padding: 10px;
             }
 
-                th:hover {
-                    background-color: rgba(211,211,211,0.7);
-                }
-
             th, td {
                 padding: 8px;
                 text-align: center;
@@ -55,13 +51,39 @@
                 text-align: center;
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
+
+            .tables-container {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                flex-wrap: nowrap;
+                gap: 10px;
+            }
+
+            .table-cell, .table-cell-2 {
+                padding: 10px;
+                box-sizing: border-box;
+                text-align: center;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            }
+
+            .table-cell {
+                width: 10%;
+                background-color: rgba(169,169,169,0.3);
+            }
+
+            .table-cell-2 {
+                width: 80%;
+                min-width: 1000px;
+            }
         </style>
 
         <script>
             lastId = 0;
             function sortTable(column) {
-                document.getElementById(column).style.background = "rgba(211,211,211,0.9)";
-                document.getElementById(lastId).style.background = "rgba(211,211,211,0.4)";
+                if (lastId == column) return;
+                document.getElementById(column).style.backgroundColor = "rgba(211,211,211,0.9)";
+                document.getElementById(lastId).style.backgroundColor = "rgba(211,211,211,0.4)";
                 lastId = column;
                 var table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementById("leaderboard");
@@ -113,43 +135,60 @@
             <div class="title-card">
                 Leaderboard
             </div>
-            <table class="custom-table" id="leaderboard">
-                <tr>
-                    <th id="0" onclick="sortTable(0)">Name</th>
-                    <th id="1" onclick="sortTable(1)">$ +/- Overall</th>
-                    <th id="2" onclick="sortTable(2)">$ Bought</th>
-                    <th id="3" onclick="sortTable(3)">$ Cashed</th>
-                    <th id="4" onclick="sortTable(4)"># Games</th>
-                    <th id="5" onclick="sortTable(5)">Time Played</th>
-                    <th id="6" onclick="sortTable(6)">$ +/- per Hour</th>
-                </tr>
-                @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getAllPlayers())
-                {
-                    <tr>
-                        <td>
-                            @player.Name
-                        </td>
-                        <td>
-                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)
-                        </td>
-                        <td>
-                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)
-                        </td>
-                        <td>
-                            @Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)
-                        </td>
-                        <td>
-                            @PokerStatBoard.Logic.GeneralLogic.getGamesPlayed(player.PlayerID).Count
-                        </td>
-                        <td>
-                            @PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]
-                        </td>
-                        <td>
-                            @(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))
-                        </td>
-                    </tr>
-                }
-            </table>
+            <div class="tables-container">
+                <div class="table-cell">
+                    <table class="custom-table">
+                        <tr>
+                            <th>Place</th>
+                        </tr>
+                        @for (int i = 1; i <= PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Count; i++)
+                        {
+                            <tr>
+                                <td>@i</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="table-cell-2">
+                    <table class="custom-table" id="leaderboard">
+                        <tr>
+                            <th id="0" onclick="sortTable(1)">Name</th>
+                            <th id="1" onclick="sortTable(1)">$ +/- Overall</th>
+                            <th id="2" onclick="sortTable(2)">$ Bought</th>
+                            <th id="3" onclick="sortTable(3)">$ Cashed</th>
+                            <th id="4" onclick="sortTable(4)"># Games</th>
+                            <th id="5" onclick="sortTable(5)">Time Played</th>
+                            <th id="6" onclick="sortTable(6)">$ +/- per Hour</th>
+                        </tr>
+                        @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getAllPlayers())
+                        {
+                            <tr>
+                                <td>
+                                    @player.Name
+                                </td>
+                                <td>
+                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)
+                                </td>
+                                <td>
+                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)
+                                </td>
+                                <td>
+                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)
+                                </td>
+                                <td>
+                                    @PokerStatBoard.Logic.GeneralLogic.getGamesPlayed(player.PlayerID).Count
+                                </td>
+                                <td>
+                                    @PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]
+                                </td>
+                                <td>
+                                    @(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
 </body>
