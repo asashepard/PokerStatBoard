@@ -188,7 +188,6 @@
                 Game Clock
             </div>
             <div class="large-display">
-                <!--PLACEHOLDER-->
                 01:23:45
             </div>
             <br />
@@ -196,16 +195,14 @@
                 On Table
             </div>
             <div class="large-display">
-                <!--PLACEHOLDER-->
-                $45.50
+                $@PokerStatBoard.Logic.GeneralLogic.getAmountOnTable()
             </div>
             <br />
             <div class="text-interim">
                 Avg. Stack
             </div>
             <div class="large-display">
-                <!--PLACEHOLDER-->
-                $4.55
+                $@(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count))
             </div>
             <br />
             <div class="button-container">
@@ -223,11 +220,11 @@
             </div>
             <table>
                 <tbody>
-                    @for (int i = 1; i <= 8; i++)
+                    @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
                     {
                         <tr style="height:73px">
-                            <td style="text-align: left">Player @i</td>
-                            <td>$0.00</td>
+                            <td style="text-align: left">@player.Name</td>
+                            <td>$@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
                         </tr>
                     }
                 </tbody>

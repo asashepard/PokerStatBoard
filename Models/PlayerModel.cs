@@ -14,15 +14,20 @@ namespace PokerStatBoard.Models
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public bool IsPlaying { get; set; }
+
         public PlayerModel()
         {
             PlayerID = Guid.NewGuid();
+            IsPlaying = false;
         }
 
         public PlayerModel(string name)
         {
             PlayerID = Guid.NewGuid();
             Name = name;
+            IsPlaying = false;
         }
     }
 }

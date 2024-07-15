@@ -180,6 +180,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Logic\DropDownLogic.cs" />
+    <Compile Include="Logic\GeneralLogic.cs" />
     <Compile Include="Migrations\202407140325008_InitialCreate.cs" />
     <Compile Include="Migrations\202407140325008_InitialCreate.Designer.cs">
       <DependentUpon>202407140325008_InitialCreate.cs</DependentUpon>
@@ -195,6 +196,10 @@
     <Compile Include="Migrations\202407140638203_Reverse-Player-Action-Relations.cs" />
     <Compile Include="Migrations\202407140638203_Reverse-Player-Action-Relations.Designer.cs">
       <DependentUpon>202407140638203_Reverse-Player-Action-Relations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407150155085_Add-IsPlaying.cs" />
+    <Compile Include="Migrations\202407150155085_Add-IsPlaying.Designer.cs">
+      <DependentUpon>202407150155085_Add-IsPlaying.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -329,6 +334,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202407140638203_Reverse-Player-Action-Relations.resx">
       <DependentUpon>202407140638203_Reverse-Player-Action-Relations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407150155085_Add-IsPlaying.resx">
+      <DependentUpon>202407150155085_Add-IsPlaying.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

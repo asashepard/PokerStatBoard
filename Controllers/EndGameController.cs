@@ -35,6 +35,14 @@ namespace PokerStatBoard.Controllers
             model.EndDateTime = DateTime.Now;
             dbContext.CurrentGame.FirstOrDefault().PokerGameID = Guid.Empty;
 
+            foreach (PlayerModel player in dbContext.Players)
+            {
+                if (player.IsPlaying)
+                {
+                    player.IsPlaying = false;
+                }
+            }
+
             dbContext.SaveChanges();
 
             return RedirectToAction("Index", "Home");

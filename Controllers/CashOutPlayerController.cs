@@ -43,6 +43,8 @@ namespace PokerStatBoard.Controllers
 
             dbContext.CashOuts.Add(model);
 
+            dbContext.Players.FirstOrDefault(p => p.PlayerID == playerID).IsPlaying = false;
+
             dbContext.SaveChanges();
 
             return RedirectToAction("Game", "Home");
