@@ -1,4 +1,5 @@
-﻿using PokerStatBoard.Models;
+﻿using PokerStatBoard.Logic;
+using PokerStatBoard.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,11 @@ namespace PokerStatBoard.Controllers
             if (model == null) // ERROR - game not found from CurrentGame entry, redirect to home
             {
                 return RedirectToAction("Index", "Home");
+            }
+
+            if (GeneralLogic.getCurrentPlayers().Count() > 0) // Players still left at the table that need cashing out
+            {
+                return RedirectToAction("Index", "CashOutPlayer");
             }
 
             model.EndDateTime = DateTime.Now;

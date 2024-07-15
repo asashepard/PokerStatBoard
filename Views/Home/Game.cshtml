@@ -211,7 +211,7 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
                 width: 500px;
-                height: 180px;
+                height: 210px;
                 max-height: 80%;
                 border-image: radial-gradient(ellipse at center, #e8d67d 60%, #a85be3) 1;
                 border-width: 4px;
@@ -221,6 +221,10 @@
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
                 z-index: 1000;
                 text-align: center;
+            }
+
+            #confirmation-2 {
+                height: 250px;
             }
 
             .overlay {
@@ -321,7 +325,7 @@
                     <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
                 </div>
                 <div class="button-container">
-                    <div class="button" onclick="addPlayerRedirect()">Add New Player</div>
+                    <div class="button" onclick="show('confirmation-2')">Add New Player</div>
                     <div class="button" onclick="show('confirmation')">End Game</div>
                 </div>
             </div>
@@ -346,7 +350,17 @@
         <div class="modal" id="confirmation">
             <h3>Are you sure?</h3>
             <p>If you end the game, your action cannot be undone.</p>
+            <p>Note: The game cannot end until all players have cashed out.</p>
             <button id="modal_button" class="button" onclick="endGameRedirect()">Yes</button>
+            <button id="modal_button" class="button" onclick="hideVisibleModals()">No</button>
+        </div>
+
+        <div class="modal" id="confirmation-2">
+            <h3>Are you sure?</h3>
+            <p>Players must be bought in every game, but only added once.</p>
+            <p>Please ensure your player has not already been added.</p>
+            <p>If they appear on the leaderboard, they have been added.</p>
+            <button id="modal_button" class="button" onclick="addPlayerRedirect()">Yes</button>
             <button id="modal_button" class="button" onclick="hideVisibleModals()">No</button>
         </div>
     </main>
