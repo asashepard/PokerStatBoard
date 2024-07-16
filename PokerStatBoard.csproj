@@ -177,6 +177,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlayerStatsController.cs" />
     <Compile Include="Controllers\StartGameController.cs" />
+    <Compile Include="Controllers\ViewUsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -201,6 +202,10 @@
     <Compile Include="Migrations\202407150155085_Add-IsPlaying.cs" />
     <Compile Include="Migrations\202407150155085_Add-IsPlaying.Designer.cs">
       <DependentUpon>202407150155085_Add-IsPlaying.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407160022182_Add-AccessLevel.cs" />
+    <Compile Include="Migrations\202407160022182_Add-AccessLevel.Designer.cs">
+      <DependentUpon>202407160022182_Add-AccessLevel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -295,6 +300,7 @@
     <Content Include="Views\CashOutPlayer\Index.cshtml" />
     <Content Include="Views\Home\Leaderboard.cshtml" />
     <Content Include="Views\PlayerStats\Index.cshtml" />
+    <Content Include="Views\ViewUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -341,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202407150155085_Add-IsPlaying.resx">
       <DependentUpon>202407150155085_Add-IsPlaying.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407160022182_Add-AccessLevel.resx">
+      <DependentUpon>202407160022182_Add-AccessLevel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
