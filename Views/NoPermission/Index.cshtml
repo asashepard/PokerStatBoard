@@ -1,0 +1,43 @@
+@{
+    ViewBag.Title = "Buy a player into the current game";
+}
+
+<body>
+    <main aria-labelledby="title">
+        <style>
+            body {
+                height: 100vh;
+                background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
+            }
+
+            footer {
+                display: none;
+            }
+
+            .notification {
+                margin: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -ms-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+            }
+        </style>
+
+        <script>
+            setTimeout(function() {
+                window.location.href = '@Url.Action("Game", "Home")';
+            }, 5000);
+        </script>
+
+        <div class="notification">
+            <h2>This action requires administrator permission.</h2>
+            <p>You will be redirected in a few seconds...</p>
+        </div>
+
+    </main>
+</body>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

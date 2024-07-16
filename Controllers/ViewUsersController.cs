@@ -42,12 +42,10 @@ namespace PokerStatBoard.Controllers
 
             if (user == null)
             {
-                return Content("not found");
+                return RedirectToAction("Index", "Home");
             }
 
-            int access = user.accessLevel;
-
-            if (!(user.accessLevel >= 2))
+            if (user.accessLevel < 2)
             {
                 return RedirectToAction("Index", "Home");
             }

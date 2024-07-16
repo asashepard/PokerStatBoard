@@ -175,6 +175,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JoinPlayerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NoPermissionController.cs" />
     <Compile Include="Controllers\PlayerStatsController.cs" />
     <Compile Include="Controllers\StartGameController.cs" />
     <Compile Include="Controllers\ViewUsersController.cs" />
@@ -292,6 +293,7 @@
     <Content Include="Views\Home\Leaderboard.cshtml" />
     <Content Include="Views\PlayerStats\Index.cshtml" />
     <Content Include="Views\ViewUsers\Index.cshtml" />
+    <Content Include="Views\NoPermission\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

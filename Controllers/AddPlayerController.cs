@@ -1,4 +1,6 @@
-﻿using Microsoft.SqlServer.Server;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using Microsoft.SqlServer.Server;
 using PokerStatBoard.Models;
 using PokerStatBoard.ViewModels;
 using System;
@@ -12,8 +14,44 @@ namespace PokerStatBoard.Controllers
 {
     public class AddPlayerController : Controller
     {
+        private ApplicationUserManager _userManager;
+
+        public AddPlayerController()
+        {
+        }
+
+        public AddPlayerController(ApplicationUserManager userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Game", "Home");
+            }
+
+            if (user.accessLevel < 1)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
+
             return View();
         }
 
