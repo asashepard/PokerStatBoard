@@ -14,6 +14,7 @@ namespace PokerStatBoard.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Game()
         {
             ApplicationDbContext dbContext = new ApplicationDbContext();
@@ -26,6 +27,7 @@ namespace PokerStatBoard.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Leaderboard()
         {
             return View();

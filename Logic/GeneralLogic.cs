@@ -563,5 +563,12 @@ namespace PokerStatBoard.Logic
 
             return winRate;
         }
+
+        public static List<ApplicationUser> GetApplicationUsers()
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.Users.ToList();
+        }
     }
 }

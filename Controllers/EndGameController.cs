@@ -1,4 +1,6 @@
-﻿using PokerStatBoard.Logic;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using PokerStatBoard.Logic;
 using PokerStatBoard.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,44 @@ namespace PokerStatBoard.Controllers
 {
     public class EndGameController : Controller
     {
+        private ApplicationUserManager _userManager;
+
+        public EndGameController()
+        {
+        }
+
+        public EndGameController(ApplicationUserManager userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         public ActionResult Index()
         {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("Game", "Home");
+            }
+
+            if (user.accessLevel < 1)
+            {
+                return RedirectToAction("Index", "NoPermission");
+            }
+
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
             if (dbContext.CurrentGame.FirstOrDefault() == null) // populate CurrentGame if necessary

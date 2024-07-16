@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,21 +17,79 @@ using PokerStatBoard.Models;
 
 namespace PokerStatBoard
 {
+    public static class EmailServiceCredentials
+    {
+        public static string EmailSMTPUrl { get; private set; }
+        public static string PortNumber { get; private set; }
+        public static string EmailSMTPUserNameHash { get; private set; }
+        public static string EmailSMTPPasswordHash { get; private set; }
+        public static string EmailFromAddress { get; private set; }
+        public static string EmailFromName { get; private set; }
+        public static string EmailAppName { get; private set; }
+
+        public static void SetCredentials(string emailSMTPUrl, string portNumber, string emailSMTPPasswordHash, string emailFromAddress, string emailFromName, string emailAppName)
+        {
+            EmailSMTPUrl = emailSMTPUrl;
+            PortNumber = portNumber;
+            EmailSMTPPasswordHash = emailSMTPPasswordHash;
+            EmailFromAddress = emailFromAddress;
+            EmailFromName = emailFromName;
+            EmailAppName = emailAppName;
+        }
+
+        //Call from global application
+        public static void PopulateEmailCredentialsFromAppConfig()
+        {
+            string emailSMTPURL = ConfigurationManager.AppSettings["emailSMTPURL"].ToString();
+            string portNumber = ConfigurationManager.AppSettings["portNumber"].ToString();
+            string emailSMTPPasswordHash = ConfigurationManager.AppSettings["emailSMTPPasswordHash"].ToString();
+            string emailFromAddress = ConfigurationManager.AppSettings["emailFromAddress"].ToString();
+            string emailFromName = ConfigurationManager.AppSettings["emailFromName"].ToString();
+            string emailAppName = ConfigurationManager.AppSettings["emailAppName"].ToString();
+
+            SetCredentials(emailSMTPURL, portNumber, emailSMTPPasswordHash, emailFromAddress, emailFromName, emailAppName);
+        }
+    }
+
+    public static class EmailHelpers
+    {
+        public static MailMessage GenerateMailMessage(string destination, string subject, string body)
+        {
+            return new MailMessage(EmailServiceCredentials.EmailFromAddress, destination, subject, body);
+        }
+    }
+
     public class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            return SendEmailAsync(message.Destination, message.Subject, message.Body);
         }
-    }
 
-    public class SmsService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
+        public Task SendEmailAsync(string destination, string subject, string body)
         {
-            // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
+            MailMessage mailMessage = EmailHelpers.GenerateMailMessage(destination, subject, body);
+            return GetSmtpClient().SendMailAsync(mailMessage);
+        }
+
+        public static SmtpClient GetSmtpClient()
+        {
+            SmtpClient smtpClient = new SmtpClient(EmailServiceCredentials.EmailSMTPUrl);
+            smtpClient.Port = 587;
+            smtpClient.EnableSsl = true;
+            smtpClient.Credentials = new NetworkCredential(EmailServiceCredentials.EmailFromAddress, EmailServiceCredentials.EmailSMTPPasswordHash);
+
+            return smtpClient;
+        }
+
+        public static MailMessage GenerateMailMessage(string destination, string subject, string body)
+        {
+            MailMessage mailMessage = new MailMessage(new MailAddress(EmailServiceCredentials.EmailFromAddress, EmailServiceCredentials.EmailFromName), new MailAddress(destination));
+            mailMessage.Subject = EmailServiceCredentials.EmailAppName + " - " + subject;
+            mailMessage.Body = body;
+            mailMessage.IsBodyHtml = true;
+
+            return mailMessage;
         }
     }
 
@@ -77,7 +138,6 @@ namespace PokerStatBoard
                 BodyFormat = "Your security code is {0}"
             });
             manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
