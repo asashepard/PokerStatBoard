@@ -21,11 +21,11 @@
             padding: 10px;
         }
 
-        .register-link {
+        .link {
             color: #a348e8;
         }
 
-            .register-link:hover {
+            .link:hover {
                 color: #9223e8;
             }
     </style>
@@ -70,13 +70,13 @@
                         </div>
                     </div>
                     <br />
-                    <a class="register-link" href="@Url.Action("Register", "Account")">
+                    <a class="link" href="@Url.Action("Register", "Account")">
                         Register as a new user
                     </a>
-                    @* Enable this once you have account confirmation enabled for password reset functionality
-            <p>
-                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-            </p>*@
+                    <br />
+                    <a class="link" href="@Url.Action("ForgotPassword", "Account")">
+                        Forgot Password
+                    </a>
                 }
             </section>
         </div>
