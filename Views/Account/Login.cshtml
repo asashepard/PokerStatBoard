@@ -20,14 +20,6 @@
             width: 50%;
             padding: 10px;
         }
-
-        .link {
-            color: #a348e8;
-        }
-
-            .link:hover {
-                color: #9223e8;
-            }
     </style>
 
     <h2 id="title">@ViewBag.Title:</h2>
@@ -70,12 +62,12 @@
                         </div>
                     </div>
                     <br />
-                    <a class="link" href="@Url.Action("Register", "Account")">
+                    <a href="@Url.Action("Register", "Account")">
                         Register as a new user
                     </a>
                     <br />
-                    <a class="link" href="@Url.Action("ForgotPassword", "Account")">
-                        Forgot Password
+                    <a href="@Url.Action("ForgotPassword", "Account")">
+                        Forgot password
                     </a>
                 }
             </section>
