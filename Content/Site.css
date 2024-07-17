@@ -28,3 +28,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/* CUSTOM */
+
+.center-main {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
