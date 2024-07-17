@@ -74,7 +74,7 @@
                 height: calc(100vh - 57px);
                 display: flex;
                 position: absolute;
-                top: 50%;
+                top: 51%;
                 left: 50%;
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
@@ -94,17 +94,14 @@
                 padding: 20px;
                 box-sizing: border-box;
                 text-align: center;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
 
             .left, .right {
                 width: 33%;
-                background-color: rgba(169,169,169,0.3);
             }
 
             .center {
                 width: 33%;
-                background-color: rgba(211,211,211,0.6);
                 z-index: 2;
             }
 
@@ -127,7 +124,6 @@
                 user-select: none;
                 transition: ease-in 0.15s;
                 z-index: 9999;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
 
                 .button:hover {
@@ -147,15 +143,12 @@
                 border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
                 border-width: 6px;
                 border-style: solid;
-                background-color: rgba(211,211,211,0.4);
                 height: 100px;
                 line-height: 90px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
 
             .subtitle-card {
                 font-size: 1.8rem;
-                background-color: rgba(211,211,211,0.4);
                 border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
                 border-width: 5px;
                 border-style: solid;
@@ -163,18 +156,15 @@
                 margin: 1px;
                 line-height: 60px;
                 margin-bottom: 15px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
 
             .large-display {
                 font-size: 2.5rem;
                 font-family: monospace;
                 font-weight: 100;
-                background-color: rgba(105,105,105,0.4);
                 color: #212121;
                 height: 80px;
                 line-height: 80px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
             }
 
             .text-interim {
@@ -206,7 +196,6 @@
                 border-style: solid;
                 background-color: #ededed;
                 padding: 20px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
                 z-index: 1000;
                 text-align: center;
             }
@@ -231,8 +220,8 @@
         </style>
 
         <div class="container">
-            <div class="left">
-                <div class="subtitle-card">
+            <div class="left glass-1 box-shadow">
+                <div class="subtitle-card glass-2 box-shadow">
                     Buy-Ins
                 </div>
                 <div style="overflow:scroll;height:250px">
@@ -250,7 +239,7 @@
                     </table>
                 </div>
                 <br />
-                <div class="subtitle-card">
+                <div class="subtitle-card glass-2 box-shadow">
                     Cash-Outs
                 </div>
                 <div style="overflow:scroll;height:200px">
@@ -268,15 +257,15 @@
                     </table>
                 </div>
             </div>
-            <div class="center">
-                <div class="title-card">
+            <div class="center glass-3 box-shadow">
+                <div class="title-card box-shadow">
                     AP3 Poker Live
                 </div>
                 <br />
                 <div class="text-interim">
                     Game Clock
                 </div>
-                <div class="large-display" id="time">
+                <div class="large-display glass-0" id="time">
                     <span class="digit" id="hr">
                         00
                     </span>
@@ -297,28 +286,28 @@
                 <div class="text-interim">
                     On Table
                 </div>
-                <div class="large-display">
+                <div class="large-display glass-0 box-shadow">
                     $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2, MidpointRounding.ToEven))
                 </div>
                 <br />
                 <div class="text-interim">
                     Avg. Stack
                 </div>
-                <div class="large-display">
+                <div class="large-display glass-0 box-shadow">
                     $@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2, MidpointRounding.ToEven))
                 </div>
                 <br />
                 <div class="button-container">
-                    <div class="button" onclick="joinPlayerRedirect()">Buy In Player</div>
-                    <div class="button" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
+                    <div class="button box-shadow" onclick="joinPlayerRedirect()">Buy In Player</div>
+                    <div class="button box-shadow" onclick="cashOutPlayerRedirect()">Cash Out Player</div>
                 </div>
                 <div class="button-container">
-                    <div class="button" onclick="show('confirmation-2')">Add New Player</div>
-                    <div class="button" onclick="show('confirmation')">End Game</div>
+                    <div class="button box-shadow" onclick="show('confirmation-2')">Add New Player</div>
+                    <div class="button box-shadow" onclick="show('confirmation')">End Game</div>
                 </div>
             </div>
-            <div class="right">
-                <div class="subtitle-card">
+            <div class="right glass-1 box-shadow">
+                <div class="subtitle-card glass-2 box-shadow">
                     At Table
                 </div>
                 <table>
