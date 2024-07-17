@@ -23,20 +23,6 @@
                 align-items: center;
             }
 
-            .name-card {
-                font-size: 2.5rem;
-                border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
-                border-width: 6px;
-                border-style: solid;
-                background-color: rgba(211,211,211,0.7);
-                width: 30%;
-                height: 100px;
-                line-height: 90px;
-                margin: 20px 0;
-                text-align: center;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            }
-
             .summary-card, .stats-table {
                 background-color: rgba(211, 211, 211, 0.4);
                 padding: 20px;
@@ -75,7 +61,7 @@
             }
 
             .stats-table th {
-                background-color: rgba(100, 100, 100, 0.3);
+                background-color: rgba(105,105,105,0.4);
             }
         </style>
 
@@ -98,11 +84,8 @@
         </script>
 
         <div class="player-stats-container">
-            <div class="name-card">
-                @Model.Name
-            </div>
             <div class="summary-card">
-                <h2>Summary</h2>
+                <h2>@Model.Name's Summary</h2>
                 <div class="summary-content">
                     <div class="summary-column">
                         <p><strong>+/- Overall:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(Model.PlayerID), 2)</p>
@@ -120,7 +103,7 @@
                 </div>
             </div>
             <div class="stats-table">
-                <h2>Games</h2>
+                <h2>@Model.Name's Games</h2>
                 <table>
                     <thead>
                         <tr>
