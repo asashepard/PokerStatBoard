@@ -14,11 +14,9 @@
         }
 
         .guide {
-            background-color: rgba(100, 100, 100, 0.7);
             color: #ededed;
             padding: 10px;
             margin-bottom: 20px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
             width: 80%;
             max-width: 1200px;
             text-align: center;
@@ -33,13 +31,11 @@
         }
 
         .user {
-            background-color: #ededed;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 10px;
             margin: 10px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
             width: 350px;
         }
 
@@ -63,9 +59,7 @@
         .button {
             height: 40px;
             width: 160px;
-            background-color: rgba(211, 211, 211, 0.7);
             border: transparent;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
             cursor: pointer;
         }
 
@@ -75,7 +69,7 @@
     </style>
 
     <div class="main-container">
-        <div class="guide">
+        <div class="guide glass-0 box-shadow">
             0- = view access, 1 = edit access, 2+ = admin access
         </div>
         <form action="@Url.Action("UpdateAccessLevels", "ViewUsers")" method="post">
@@ -83,7 +77,7 @@
             <div class="form-container">
                 @for (int i = 0; i < Model.Count; i++)
                 {
-                    <div class="user">
+                    <div class="user glass-1 box-shadow">
                         <span>@Model[i].UserName</span>
                         <input class="field" type="text" name="users[@i].accessLevel" value="@Model[i].accessLevel" />
                         <input type="hidden" name="users[@i].Id" value="@Model[i].Id" />
@@ -91,7 +85,7 @@
                 }
             </div>
             <div class="button-container">
-                <button class="button" type="submit">Save Changes</button>
+                <button class="button glass-3 box-shadow" type="submit">Save Changes</button>
             </div>
         </form>
     </div>
