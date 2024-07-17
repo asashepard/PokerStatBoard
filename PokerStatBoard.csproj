@@ -291,7 +291,7 @@
     <Content Include="Views\JoinPlayer\Index.cshtml" />
     <Content Include="Views\CashOutPlayer\Index.cshtml" />
     <Content Include="Views\Home\Leaderboard.cshtml" />
-    <Content Include="Views\PlayerStats\Index.cshtml" />
+    <Content Include="Views\PlayerStats\Name.cshtml" />
     <Content Include="Views\ViewUsers\Index.cshtml" />
     <Content Include="Views\NoPermission\Index.cshtml" />
   </ItemGroup>

@@ -176,6 +176,13 @@ namespace PokerStatBoard.Logic
             return context.Players.FirstOrDefault(p => p.PlayerID == playerID);
         }
 
+        public static PlayerModel getPlayer(string name)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.Players.FirstOrDefault(p => p.Name == name);
+        }
+
         public static List<PlayerModel> getAllPlayers()
         {
             ApplicationDbContext context = new ApplicationDbContext();

@@ -165,7 +165,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a class="player_link" href="@Url.Action("Index", "PlayerStats", new { id = player.PlayerID })">
+                                    <a class="player_link" href="@Url.Action(player.Name, "PlayerStats")">
                                         @player.Name
                                     </a>
                                 </td>
