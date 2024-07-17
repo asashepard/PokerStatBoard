@@ -11,13 +11,18 @@ namespace PokerStatBoard.Controllers
     [Authorize]
     public class PlayerStatsController : Controller
     {
-        public ActionResult Index(Guid id)
+        public ActionResult Index()
         {
-            if (id == null)
+            return RedirectToAction("Leaderboard", "Home");
+        }
+
+        public ActionResult Name(string name)
+        {
+            if (name == null)
             {
                 return RedirectToAction("Leaderboard", "Home");
             }
-            var player = GeneralLogic.getPlayer(id);
+            var player = GeneralLogic.getPlayer(name);
             if (player == null)
             {
                 return RedirectToAction("Leaderboard", "Home");

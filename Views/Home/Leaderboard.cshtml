@@ -74,6 +74,7 @@
             .table-cell-2 {
                 width: 100%;
                 min-width: 1000px;
+                background-color: rgba(169,169,169,0.3);
             }
 
             .player_link {
@@ -165,7 +166,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a class="player_link" href="@Url.Action("Index", "PlayerStats", new { id = player.PlayerID })">
+                                    <a class="player_link" href="@Url.Action(player.Name, "PlayerStats")">
                                         @player.Name
                                     </a>
                                 </td>
