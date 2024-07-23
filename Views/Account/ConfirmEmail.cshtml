@@ -1,14 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Confirm Email";
+    ViewBag.Title = "Thank you for confirming your email";
 }
-<main class="center-main" aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title</h2>
-    <div>
-        <p>
-            Thank you for confirming your email.
-        </p>
-        <p class="link">
-            @Html.ActionLink("Click here to Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-        </p>
+<main aria-labelledby="title">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card" style="width: 50vh;">
+            <div class="card-body">
+                <h2 class="card-title text-center" id="title">@ViewBag.Title.</h2>
+                <hr />
+                <h4 class="link">
+                    @Html.ActionLink("Click here to log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                </h4>
+            </div>
+        </div>
     </div>
 </main>

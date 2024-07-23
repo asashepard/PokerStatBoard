@@ -3,25 +3,38 @@
     ViewBag.Title = "Manage Account";
 }
 
-<main class="center-main" aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title</h2>
-
-    <p class="text-success">@ViewBag.StatusMessage</p>
-    <div>
-        <br />
-        <dl class="dl-horizontal">
-            <dt>Email:</dt>
-            <dd>
-                <p>
-                    @User.Identity.Name
-                </p>
-            </dd>
-            <dt>Password:</dt>
-            <dd>
-                <p>
-                    @Html.ActionLink("Change your password", "ChangePassword") - requires email confirmation
-                </p>
-            </dd>
-        </dl>
+<main aria-labelledby="title">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card" style="width: 50vh;">
+            <div class="card-body">
+                <h2 class="card-title text-center" id="title">@ViewBag.Title:</h2>
+                <hr />
+                @using (Html.BeginForm("ChangePassword", "Manage", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            <h4>Email</h4>
+                        </div>
+                    </div>
+                    <div class="mb-3 row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @User.Identity.Name
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            <h4>Password</h4>
+                        </div>
+                    </div>
+                    <div class="mb-3 row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @Html.ActionLink("Change your password", "ChangePassword") - requires email confirmation
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </main>
