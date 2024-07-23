@@ -7,7 +7,7 @@
     <div class="container d-flex justify-content-center align-items-center">
         <div class="card" style="width: 50vh;">
             <div class="card-body">
-                <h2 class="card-title text-center" id="title">@ViewBag.Title</h2>
+                <h2 class="card-title text-center" id="title">@ViewBag.Title:</h2>
                 <hr />
                 @using (Html.BeginForm("SubmitCashOutPlayerForm", "CashOutPlayer", FormMethod.Post, new { role = "form" }))
                 {
