@@ -4,64 +4,53 @@
 }
 
 <main aria-labelledby="title">
-    <style>
-        body {
-            height: 100vh;
-            background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
-        }
-
-        footer {
-            display: none;
-        }
-
-        .content {
-            width: 700px;
-            display: flex;
-            justify-content: space-between;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -ms-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-        }
-
-        .side-element {
-            width: 50%;
-        }
-    </style>
-
-    <div class="content">
-        <div class="side-element">
-            <h2 id="title">@ViewBag.Title:</h2>
-        </div>
-        <div class="side-element">
-            @using (Html.BeginForm("SubmitCashOutPlayerForm", "CashOutPlayer", FormMethod.Post, new { role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <br />
-                <div class="row">
-                    @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(m => m.Name, PokerStatBoard.Logic.DropDownLogic.GetPlayersCurrentlyPlaying(), "--Select a player--")
-                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card" style="width: 50vh;">
+            <div class="card-body">
+                <h2 class="card-title text-center" id="title">@ViewBag.Title:</h2>
+                <hr />
+                @using (Html.BeginForm("SubmitCashOutPlayerForm", "CashOutPlayer", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @Html.LabelFor(m => m.Name, new { @class = "col-form-label" })
+                        </div>
+                    </div>
+                    <div class="mb-3 row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @Html.DropDownListFor(m => m.Name, PokerStatBoard.Logic.DropDownLogic.GetPlayersCurrentlyPlaying(), "--Select a player--", new { @class = "form-select" })
+                            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @Html.LabelFor(m => m.Amount, new { @class = "col-form-label text-center" })
+                        </div>
+                    </div>
+                    <div class="mb-3 row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="mb-3 row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            Left on table: $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2)
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-8 text-center">
+                            <input type="submit" value="Confirm" class="btn btn-outline-dark" />
+                        </div>
+                    </div>
+                }
+                <div class="mb-3 row mt-4 justify-content-center">
+                    <div class="col-sm-12 text-center">
+                        <h4>Note - Amount may be altered to prevent leaving money without any players or to prevent a player cashing for more than is left</h4>
                     </div>
                 </div>
-                <div class="row">
-                    @Html.LabelFor(m => m.Amount, new { @class = "col-md-2 col-form-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Amount, new { @class = "form-control" })
-                        Left on table: $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2)
-                        <p>Note - Amount may be altered to prevent leaving money without any players or to prevent a player cashing for more than is left</p>
-                        @Html.ValidationMessageFor(m => m.Amount, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="offset-md-2 col-md-10">
-                        <input type="submit" value="Confirm" class="btn btn-outline-dark" />
-                    </div>
-                </div>
-            }
+            </div>
         </div>
     </div>
 </main>

@@ -10,6 +10,18 @@ namespace PokerStatBoard.Logic
 {
     public class GeneralLogic
     {
+        public static void Init()
+        {
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            if (dbContext.CurrentGame == null)
+            {
+                CurrentGameModel currentGame = new CurrentGameModel();
+                dbContext.CurrentGame.Add(currentGame);
+                dbContext.SaveChanges();
+            }
+        }
+
         public static decimal getAmountOnTable()
         {
             decimal amount = 0;

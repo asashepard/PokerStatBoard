@@ -1,40 +1,27 @@
 @{
-    ViewBag.Title = "Buy a player into the current game";
+    ViewBag.Title = "No Permission";
 }
-
 <body>
+    <script>
+        setTimeout(function() {
+            window.location.href = '@Url.Action("Game", "Home")';
+        }, 5000);
+    </script>
+
     <main aria-labelledby="title">
-        <style>
-            body {
-                height: 100vh;
-                background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
-            }
-
-            footer {
-                display: none;
-            }
-
-            .notification {
-                margin: 0;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                -ms-transform: translate(-50%, -50%);
-                transform: translate(-50%, -50%);
-            }
-        </style>
-
-        <script>
-            setTimeout(function() {
-                window.location.href = '@Url.Action("Game", "Home")';
-            }, 5000);
-        </script>
-
-        <div class="notification">
-            <h2>This action requires administrator permission.</h2>
-            <p>You will be redirected in a few seconds...</p>
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="card" style="width: 50vh;">
+                <div class="card-body">
+                    <h2 class="card-title text-center" id="title">This action requires administrator permission.</h2>
+                    <hr />
+                    <div class="row justify-content-center">
+                        <div class="col-sm-8 text-center">
+                            <h4>You will be redirected in a few seconds...</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </main>
 </body>
 

@@ -3,103 +3,18 @@
 }
 
 <body onload="sortTable(1)">
-    <main>
-        <style>
-            body {
-                height: 100vh;
-                background: radial-gradient(ellipse at left, #e8d67d, transparent), radial-gradient(ellipse at right, #e8d67d, #a85be3);
-            }
-
-            footer {
-                display: none;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th {
-                background-color: rgba(211,211,211,0.4);
-                cursor: pointer;
-                user-select: none;
-                transition: ease-in 0.15s;
-                padding: 10px;
-            }
-
-            th, td {
-                padding: 8px;
-                text-align: center;
-                font-size: 1.5rem;
-            }
-
-            .title-card {
-                font-size: 2.5rem;
-                position: relative;
-                top: 50px;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                border-image: radial-gradient(ellipse at center, #a85be3 60%, #e8d67d 100%) 1;
-                border-width: 6px;
-                border-style: solid;
-                background-color: rgba(211,211,211,0.7);
-                width: 30%;
-                height: 100px;
-                line-height: 90px;
-                margin: 20px;
-                text-align: center;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            }
-
-            .tables-container {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                flex-wrap: nowrap;
-                gap: 10px;
-            }
-
-            .table-cell, .table-cell-2 {
-                padding: 10px;
-                box-sizing: border-box;
-                text-align: center;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            }
-
-            .table-cell {
-                width: 10%;
-                background-color: rgba(169,169,169,0.3);
-            }
-
-            .table-cell-2 {
-                width: 100%;
-                min-width: 1000px;
-                background-color: rgba(169,169,169,0.3);
-            }
-
-            .player_link {
-                color: #a348e8;
-            }
-
-                .player_link:hover {
-                    color: #9223e8;
-                }
-
-            .noclick {
-                box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
-                background-color: transparent;
-                cursor: inherit;
-            }
-        </style>
-
+    <main class="container my-5">
         <script>
-            lastId = 0;
+            let lastId = 0;
             function sortTable(column) {
-                if (lastId == column) return;
-                document.getElementById(column).style.backgroundColor = "rgba(237,237,237,1)";
-                document.getElementById(lastId).style.backgroundColor = "rgba(211,211,211,0.4)";
+                if (lastId === column) return;
+                document.getElementById(column).classList.add("bg-dark");
+                document.getElementById(column).classList.add("text-light");
+                document.getElementById(lastId).classList.remove("bg-dark");
+                document.getElementById(lastId).classList.remove("text-light");
                 lastId = column;
-                var table, rows, switching, i, x, y, shouldSwitch;
+                column += 1;
+                let table, rows, switching, i, x, y, shouldSwitch;
                 table = document.getElementById("leaderboard");
                 switching = true;
                 while (switching) {
@@ -109,8 +24,8 @@
                         shouldSwitch = false;
                         x = rows[i].getElementsByTagName("td")[column];
                         y = rows[i + 1].getElementsByTagName("td")[column];
-                        var x_val = parseFloat(x.innerHTML.replaceAll(":", ""));
-                        var y_val = parseFloat(y.innerHTML.replaceAll(":", ""));
+                        let x_val = parseFloat(x.innerHTML.replace(/:/g, ""));
+                        let y_val = parseFloat(y.innerHTML.replace(/:/g, ""));
                         if (isNaN(x_val) || isNaN(y_val)) {
                             if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
                                 shouldSwitch = true;
@@ -128,77 +43,69 @@
                         switching = true;
                     }
                 }
+                for (i = 1; i < rows.length; i++) {
+                    rows[i].getElementsByTagName("td")[0].innerHTML = i;
+                }
             }
         </script>
 
-        <div>
-            <div class="title-card">
-                Leaderboard
-            </div>
-            <div class="tables-container">
-                <div class="table-cell">
-                    <table class="custom-table">
-                        <tr>
-                            <th style="height:88px" class="noclick">Rank</th>
-                        </tr>
-                        @for (int i = 1; i <= PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Count; i++)
-                        {
-                            <tr>
-                                <td>@i</td>
-                            </tr>
-                        }
-                    </table>
+        <style>
+            .bg-custom-1 {
+                background-color: rgba(225, 225, 225, 0.8);
+            }
+        </style>
+
+        <div class="card bg-custom-1 border-0 rounded-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h1 class="display-4">Leaderboard</h1>
                 </div>
-                <div class="table-cell-2">
-                    <table class="custom-table" id="leaderboard">
-                        <tr>
-                            <th id="0" class="noclick">Name</th>
-                            <th id="1" onclick="sortTable(1)">$ +/- Overall</th>
-                            <th id="2" onclick="sortTable(2)">$ Bought</th>
-                            <th id="3" onclick="sortTable(3)">$ Cashed</th>
-                            <th id="4" onclick="sortTable(4)">Time Played</th>
-                            <th id="5" onclick="sortTable(5)">$ +/- per Hour</th>
-                            <th id="6" onclick="sortTable(6)">Best Win</th>
-                            <th id="7" onclick="sortTable(7)">Worst Loss</th>
-                            <th id="8" onclick="sortTable(8)">Win Rate</th>
-                        </tr>
-                        @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getAllPlayers())
-                        {
-                            <tr>
-                                <td>
-                                    <a class="player_link" href="@Url.Action(player.Name, "PlayerStats")">
-                                        @player.Name
-                                    </a>
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)
-                                </td>
-                                <td>
-                                    @PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]
-                                </td>
-                                <td>
-                                    @(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestGain(player.PlayerID), 2)
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestLoss(player.PlayerID), 2)
-                                </td>
-                                <td>
-                                    @Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(player.PlayerID), 3)
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card bg-transparent rounded-4 overflow-hidden border-dark" style="border-width: 4px;">
+                            <div class="table-responsive">
+                                <table class="table bg-transparent table-striped table-borderless" id="leaderboard">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th id="0">Name</th>
+                                            <th style="cursor: pointer;" id="1" onclick="sortTable(1)">$ +/- Overall</th>
+                                            <th style="cursor: pointer;" id="2" onclick="sortTable(2)">$ Bought</th>
+                                            <th style="cursor: pointer;" id="3" onclick="sortTable(3)">$ Cashed</th>
+                                            <th style="cursor: pointer;" id="4" onclick="sortTable(4)">Time Played</th>
+                                            <th style="cursor: pointer;" id="5" onclick="sortTable(5)">$ per Hour</th>
+                                            <th style="cursor: pointer;" id="6" onclick="sortTable(6)">Best Win</th>
+                                            <th style="cursor: pointer;" id="7" onclick="sortTable(7)">Worst Loss</th>
+                                            <th style="cursor: pointer;" id="8" onclick="sortTable(8)">Win Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var (player, index) in PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Select((player, index) => (player, index + 1)))
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>
+                                                    <a class="text-decoration-none text-purple" href="@Url.Action(player.Name, "PlayerStats")">
+                                                        @player.Name
+                                                    </a>
+                                                </td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)</td>
+                                                <td>@PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]</td>
+                                                <td>@(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestGain(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestLoss(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(player.PlayerID), 3)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
+</main>
 </body>
