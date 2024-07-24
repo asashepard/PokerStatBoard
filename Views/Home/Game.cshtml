@@ -3,14 +3,13 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body onload="stopWatch()">
-    <main class="container-fluid">
+    <main class="container-fluid mt-5">
         <script>
             function addPlayerRedirect() {
                 var url = '@Url.Action("Index", "AddPlayer")';
@@ -57,42 +56,70 @@
             }
         </script>
 
+        <style>
+            .bg-custom-1 {
+                background-color: rgba(225, 225, 225, 0.8);
+            }
+
+            .bg-custom-2 {
+                background-color: rgb(80, 80, 80);
+            }
+        </style>
+
         <div class="row">
             <div class="col-lg-4 mb-4">
-                <div class="card" style="height: 80vh;">
-                    <div class="card" style="height: 50%;">
-                        <div class="card-header">
+                <div class="card bg-transparent border-0" style="height: 80vh;">
+                    <div class="card bg-custom-1 rounded-4 overflow-hidden" style="height: 49%;">
+                        <div class="card-header fs-5 text-center bg-dark text-light fw-semibold">
                             Buy-Ins
                         </div>
-                        <div class="card-body p-0" style="max-height: 250px; overflow-y: auto;">
-                            <table class="table table-striped table-sm">
+                        <div class="card-body p-0">
+                            <table class="table table-striped bg-transparent table-borderless table-hover">
                                 <tbody>
-                                    @foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns())
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns().Count == 0)
                                     {
                                         <tr>
-                                            <td class="text-start">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
-                                            <td class="text-start">@PokerStatBoard.Logic.GeneralLogic.getPlayer(buyIn.PlayerID).Name</td>
-                                            <td class="text-end">$@buyIn.Amount</td>
+                                            <td class="text-center">none yet</td>
                                         </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns())
+                                        {
+                                            <tr>
+                                                <td class="text-start fs-5">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                                <td class="text-start fs-5">@PokerStatBoard.Logic.GeneralLogic.getPlayer(buyIn.PlayerID).Name</td>
+                                                <td class="text-end fs-5">$@buyIn.Amount</td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="card" style="height: 50%;">
-                        <div class="card-header">
+                    <div class="card mt-auto bg-custom-1 rounded-4 overflow-hidden" style="height: 49%;">
+                        <div class="card-header fs-5 text-center bg-dark text-light fw-semibold">
                             Cash-Outs
                         </div>
-                        <div class="card-body p-0" style="max-height: 200px; overflow-y: auto;">
-                            <table class="table table-striped table-sm">
+                        <div class="card-body p-0">
+                            <table class="table table-striped bg-transparent table-borderless table-hover">
                                 <tbody>
-                                    @foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts())
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts().Count == 0)
                                     {
                                         <tr>
-                                            <td class="text-start">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
-                                            <td class="text-start">@PokerStatBoard.Logic.GeneralLogic.getPlayer(cashOut.PlayerID).Name</td>
-                                            <td class="text-end">$@cashOut.Amount</td>
+                                            <td class="text-center">none yet</td>
                                         </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts())
+                                        {
+                                            <tr>
+                                                <td class="text-start fs-5">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                                <td class="text-start fs-5">@PokerStatBoard.Logic.GeneralLogic.getPlayer(cashOut.PlayerID).Name</td>
+                                                <td class="text-end fs-5">$@cashOut.Amount</td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
@@ -101,97 +128,128 @@
                 </div>
             </div>
             <div class="col-lg-4 mb-4 text-center">
-                <div class="card" style="height: 80vh;">
-                    <div class="card m-4">
-                        <div class="card-header fs-3">
-                            AP3 Poker Live
+                <div class="card bg-custom-1 rounded-4 overflow-hidden d-flex flex-column" style="height: 80vh;">
+                    <div class="card-header fs-3 text-center bg-dark text-light fw-semibold mb-4">
+                        AP3 Poker Live
+                    </div>
+                    <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
+                        <div class="row w-100 mb-2">
+                            <div class="fs-4 col-12">Game Clock</div>
+                            <div class="fs-2 col-12" id="time">
+                                <span id="hr">00</span>:<span id="min">00</span>:<span id="sec">00</span>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="fs-5">Game Clock</div>
-                        <div class="fs-2" id="time">
-                            <span id="hr">00</span>:<span id="min">00</span>:<span id="sec">00</span>
+                        <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
+                        <div class="row w-100 mt-2 mb-2">
+                            <div class="fs-4 col-12">On Table</div>
+                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2))</div>
                         </div>
-                    </div>
-                    <div class="mt-4">
-                        <div class="fs-5">On Table</div>
-                        <div class="fs-2">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2))</div>
-                    </div>
-                    <div class="mt-4">
-                        <div class="fs-5">Avg. Stack</div>
-                        <div class="fs-2">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2))</div>
-                    </div>
-                    <div class="mt-auto">
-                        <div class="d-grid gap-2 mt-4">
-                            <button class="btn btn-outline-primary me-4 ms-4" onclick="joinPlayerRedirect()">Buy In Player</button>
-                            <button class="btn btn-outline-primary me-4 ms-4" onclick="cashOutPlayerRedirect()">Cash Out Player</button>
+                        <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
+                        <div class="row w-100 mt-2 mb-2">
+                            <div class="fs-4 col-12">Avg. Stack</div>
+                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2))</div>
                         </div>
-                        <div class="d-grid gap-2 mt-4">
-                            <button class="btn btn-outline-primary me-4 ms-4" data-bs-toggle="modal" data-bs-target="#confirmation">Add New Player</button>
-                            <button class="btn btn-outline-primary me-4 ms-4 mb-4" data-bs-toggle="modal" data-bs-target="#confirmation-2">End Game</button>
+                        <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
+                        <div class="row w-100 mt-2 mb-2">
+                            <div class="fs-4 col-12">Blinds</div>
+                            <div class="fs-2 col-12">$0.10 / $0.20</div>
+                        </div>
+                        <div class="row w-100 mt-2 mb-2">
+                            <img src="~/Images/extended_logo.png" />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 mb-4">
-                <div class="card" style="height: 80vh;">
-                    <div class="card-header">
-                        At Table
+                <div class="card bg-transparent border-0" style="height: 80vh;">
+                    <div class="card bg-custom-1 rounded-4 overflow-hidden" style="height: 77%;">
+                        <div class="card-header fs-5 text-center bg-dark text-light fw-semibold">
+                            At Table
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-striped bg-transparent table-borderless table-hover">
+                                <tbody>
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0)
+                                    {
+                                        <tr>
+                                            <td class="text-center">no one</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
+                                        {
+                                            <tr>
+                                                <td class="text-start fs-5">@player.Name</td>
+                                                <td class="text-end fs-5">in for $@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card-body p-0">
-                        <table class="table table-striped table-sm">
-                            <tbody>
-                                @foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
-                                {
-                                    <tr>
-                                        <td class="text-start">@player.Name</td>
-                                        <td class="text-end">$@PokerStatBoard.Logic.GeneralLogic.getCurrentIn(player)</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="card bg-custom-1 rounded-4 mt-auto d-flex overflow-hidden position-relative" style="height: 21%; min-height: 140px;">
+                        <div class="container h-100">
+                            <div class="row h-50">
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="joinPlayerRedirect()">Buy In Player</button>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="cashOutPlayerRedirect()">Cash Out Player</button>
+                                </div>
+                            </div>
+                            <div class="row h-50">
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-outline-dark w-100 h-75 mb-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#confirmation-2">Add New Player</button>
+                                </div>
+                                <div class="col-6 d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-outline-danger w-100 h-75 mb-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#confirmation">End Game</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
             </div>
-        </div>
 
-        <div class="modal fade" id="confirmation">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Are you sure?</h5>
-                        <button type="button" class="btn-close" data-bs-target="#confirmation" data-bs-toggle="modal" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>If you end the game, your action cannot be undone.</p>
-                        <p>Note: The game cannot end until all players have cashed out.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="modal_button" class="btn btn-primary" onclick="endGameRedirect()">Yes</button>
-                        <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
+                <div class="modal fade" id="confirmation">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Are you sure?</h5>
+                                <button type="button" class="btn-close" data-bs-target="#confirmation" data-bs-toggle="modal" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>If you end the game, your action cannot be undone.</p>
+                                <p>Note: The game cannot end until all players have cashed out.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modal_button" class="btn btn-primary" onclick="endGameRedirect()">Yes</button>
+                                <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="modal fade" id="confirmation-2">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Are you sure?</h5>
-                        <button type="button" class="btn-close" data-bs-target="#confirmation-2" data-bs-toggle="modal" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Players must be bought in every game, but only added once.</p>
-                        <p>Please ensure your player has not already been added.</p>
-                        <p>If they appear on the leaderboard, they have been added.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="modal_button" class="btn btn-primary" onclick="addPlayerRedirect()">Yes</button>
-                        <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation-2" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
+                <div class="modal fade" id="confirmation-2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Are you sure?</h5>
+                                <button type="button" class="btn-close" data-bs-target="#confirmation-2" data-bs-toggle="modal" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Players must be bought in every game, but only added once.</p>
+                                <p>Please ensure your player has not already been added.</p>
+                                <p>If they appear on the leaderboard, they have been added.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modal_button" class="btn btn-primary" onclick="addPlayerRedirect()">Yes</button>
+                                <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation-2" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+</main>
 </body>
