@@ -58,14 +58,15 @@
                             <div class="col-md-6 mt-2 fs-5">
                                 <p><strong>+/- Overall:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(Model.PlayerID), 2)</p>
                                 <p><strong>+/- per Hour:</strong> $@(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(Model.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(Model.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(Model.PlayerID).TotalMinutes)) * 60, 2))</p>
+                                <p><strong>+/- per Game:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getAverageEarnings(Model.PlayerID), 2)</p>
                                 <p><strong>Bought In:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(Model.PlayerID), 2)</p>
                                 <p><strong>Cashed Out:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(Model.PlayerID), 2)</p>
-                                <p><strong>Win Rate:</strong> @Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(Model.PlayerID), 3)</p>
                             </div>
                             <div class="col-md-6 mt-2 fs-5">
                                 <p><strong>Best Win:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestGain(Model.PlayerID), 2)</p>
                                 <p><strong>Worst Loss:</strong> $@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestLoss(Model.PlayerID), 2)</p>
                                 <p><strong>Games Played:</strong> @PokerStatBoard.Logic.GeneralLogic.getGamesPlayed(Model.PlayerID).Count</p>
+                                <p><strong>Win Rate:</strong> @Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(Model.PlayerID), 3)</p>
                                 <p><strong>Time Played:</strong> @PokerStatBoard.Logic.GeneralLogic.getTimePlayed(Model.PlayerID).ToString().Split('.')[0]</p>
                             </div>
                         </div>

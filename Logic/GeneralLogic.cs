@@ -619,6 +619,22 @@ namespace PokerStatBoard.Logic
             return winRate;
         }
 
+        public static decimal getAverageEarnings(Guid playerId)
+        {
+            List<Guid> gamesPlayed = getGamesPlayed(playerId);
+
+            if (gamesPlayed.Count == 0)
+            {
+                return 0;
+            }
+
+            decimal total = gamesPlayed.Sum(game => getPlusMinus(playerId, game));
+
+            decimal average = (decimal)total / gamesPlayed.Count;
+
+            return average;
+        }
+
         public static List<ApplicationUser> GetApplicationUsers()
         {
             ApplicationDbContext context = new ApplicationDbContext();
