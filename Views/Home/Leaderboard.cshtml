@@ -55,54 +55,57 @@
             }
         </style>
 
-        <div class="text-center mb-4">
-            <h1 class="display-4">Leaderboard</h1>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card bg-custom-1 rounded-4 overflow-hidden border-dark" style="border-width: 4px;">
-                    <div class="table-responsive">
-                        <table class="table bg-transparent table-striped table-borderless" id="leaderboard">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th id="0">Name</th>
-                                    <th style="cursor: pointer;" id="1" onclick="sortTable(1)">$ +/- Overall</th>
-                                    <th style="cursor: pointer;" id="2" onclick="sortTable(2)">$ Bought</th>
-                                    <th style="cursor: pointer;" id="3" onclick="sortTable(3)">$ Cashed</th>
-                                    <th style="cursor: pointer;" id="4" onclick="sortTable(4)">Time Played</th>
-                                    <th style="cursor: pointer;" id="5" onclick="sortTable(5)">$ per Hour</th>
-                                    <th style="cursor: pointer;" id="6" onclick="sortTable(6)">Best Win</th>
-                                    <th style="cursor: pointer;" id="7" onclick="sortTable(7)">Worst Loss</th>
-                                    <th style="cursor: pointer;" id="8" onclick="sortTable(8)">Win Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var (player, index) in PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Select((player, index) => (player, index + 1)))
-                                {
-                                    <tr>
-                                        <td>@index</td>
-                                        <td>
-                                            <a class="text-decoration-none text-purple" href="@Url.Action(player.Name, "PlayerStats")">
-                                                @player.Name
-                                            </a>
-                                        </td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)</td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)</td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)</td>
-                                        <td>@PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]</td>
-                                        <td>@(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))</td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestGain(player.PlayerID), 2)</td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestLoss(player.PlayerID), 2)</td>
-                                        <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(player.PlayerID), 3)</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+        <div class="card bg-custom-1 border-0 rounded-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h1 class="display-4">Leaderboard</h1>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card bg-transparent rounded-4 overflow-hidden border-dark" style="border-width: 4px;">
+                            <div class="table-responsive">
+                                <table class="table bg-transparent table-striped table-borderless" id="leaderboard">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th id="0">Name</th>
+                                            <th style="cursor: pointer;" id="1" onclick="sortTable(1)">$ +/- Overall</th>
+                                            <th style="cursor: pointer;" id="2" onclick="sortTable(2)">$ Bought</th>
+                                            <th style="cursor: pointer;" id="3" onclick="sortTable(3)">$ Cashed</th>
+                                            <th style="cursor: pointer;" id="4" onclick="sortTable(4)">Time Played</th>
+                                            <th style="cursor: pointer;" id="5" onclick="sortTable(5)">$ per Hour</th>
+                                            <th style="cursor: pointer;" id="6" onclick="sortTable(6)">Best Win</th>
+                                            <th style="cursor: pointer;" id="7" onclick="sortTable(7)">Worst Loss</th>
+                                            <th style="cursor: pointer;" id="8" onclick="sortTable(8)">Win Rate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var (player, index) in PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Select((player, index) => (player, index + 1)))
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>
+                                                    <a class="text-decoration-none text-purple" href="@Url.Action(player.Name, "PlayerStats")">
+                                                        @player.Name
+                                                    </a>
+                                                </td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getBoughtIn(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getCashedOut(player.PlayerID), 2)</td>
+                                                <td>@PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).ToString().Split('.')[0]</td>
+                                                <td>@(Math.Round((Decimal.ToDouble(PokerStatBoard.Logic.GeneralLogic.getPlusMinus(player.PlayerID)) / (PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getTimePlayed(player.PlayerID).TotalMinutes)) * 60, 2))</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestGain(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getGreatestLoss(player.PlayerID), 2)</td>
+                                                <td>@Math.Round(PokerStatBoard.Logic.GeneralLogic.getWinRate(player.PlayerID), 3)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    </main>
+</main>
 </body>

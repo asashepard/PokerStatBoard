@@ -2,6 +2,12 @@
     ViewBag.Title = "Home";
 }
 
+<script>
+    function scrollPage() {
+        document.getElementById("scrollTarget").scrollIntoView(true);
+    }
+</script>
+
 <main class="container my-5">
     <!-- Header Section -->
     <div class="text-center mb-5">
@@ -10,12 +16,12 @@
         <p class="lead fs-3 mt-2">The ultimate tool for hosting, tracking, and enhancing your poker games. Stay on top of your game like never before with our extensive player-oriented statistics.</p>
     </div>
 
-    <div class="d-flex justify-content-center align-items-center w-100">
-        <img src="~/Images/downarrow.gif" style="max-width: 10vh;" />
+    <div class="d-flex justify-content-center align-items-center w-100" >
+        <img class="mb-2" src="~/Images/downarrow.gif" style="max-width: 10vh; cursor: pointer;" onclick="scrollPage()" />
     </div>
 
     <!-- Features Section -->
-    <div class="my-4">
+    <div class="my-4" id="scrollTarget" style="scroll-margin-top: 2vh;">
         <div class="container text-center">
             <h2 class="display-5">Live Game Display</h2>
             <p class="lead">Home games? Stay updated and keep track of money with a real-time dashboard.</p>
