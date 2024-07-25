@@ -1,0 +1,78 @@
+@model List<PokerStatBoard.Models.GroupModel>
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<script>
+    function startGame(groupName) {
+        const url = '@Url.Action("GroupName", "StartGame", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
+        window.location.href = url;
+    }
+
+    function copyInvite(groupName) {
+        // Add your copy invite logic here
+    }
+
+    function viewLeaderboard(groupName) {
+        // Add your view leaderboard logic here
+    }
+
+    function leaveGroup(groupName) {
+        // Add your leave group logic here
+    }
+
+    function editGroup(groupName) {
+        // Add your edit group logic here
+    }
+</script>
+
+<style>
+    .bg-custom-1 {
+        background-color: rgba(225, 225, 225, 0.8);
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .btn-group .btn {
+        flex: 1;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 text-center">
+            <img src="~/Images/extended_logo.png" class="img-fluid" style="width: 500px; max-width: 80vw;" />
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+                <h2>Groups</h2>
+                <button class="btn btn-primary rounded-pill" onclick="location.href='@Url.Action("Index", "CreateGroup")'">Create New Group</button>
+            </div>
+
+            @foreach (var group in Model)
+            {
+                <div class="card mb-3 bg-custom-1 border-0 rounded-4">
+                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start">
+                        <div class="mb-3 mb-md-0 mt-1">
+                            <h5 class="card-title fs-5">@group.Name</h5>
+                            <p class="mb-0">@PokerStatBoard.Logic.GeneralLogic.getAllPlayers(group.GroupID).Count Players</p>
+                        </div>
+                        <div class="btn-group flex-wrap">
+                            <button class="btn btn-outline-success rounded-pill mb-2 mb-md-0 me-2" onclick="startGame('@group.Name')">Start Game</button>
+                            <button class="btn btn-outline-dark rounded-pill mb-2 mb-md-0 me-2" onclick="viewLeaderboard('@group.Name')">Leaderboard</button>
+                            <button class="btn btn-outline-secondary rounded-pill mb-2 mb-md-0 me-2" onclick="copyInvite('@group.Name')">Copy Invite</button>
+                            <button class="btn btn-outline-danger rounded-pill mb-2 mb-md-0 me-2" onclick="leaveGroup('@group.Name')">Leave</button>
+                            <button class="btn btn-outline-warning rounded-pill mb-2 mb-md-0" onclick="editGroup('@group.Name')">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,4 +1,7 @@
-﻿using PokerStatBoard.Models;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using PokerStatBoard.Logic;
+using PokerStatBoard.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +12,81 @@ namespace PokerStatBoard.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationUserManager _userManager;
+
+        public HomeController()
+        {
+        }
+
+        public HomeController(ApplicationUserManager userManager)
+        {
+            UserManager = userManager;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         public ActionResult Index()
         {
             return View();
         }
 
         [Authorize]
-        public ActionResult Game()
+        public ActionResult Game(string groupName)
         {
-            ApplicationDbContext dbContext = new ApplicationDbContext();
+            GroupModel model = GeneralLogic.getGroup(groupName);
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - redirect to home page
+            if (model == null) // bad link
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            return View();
+            if (GeneralLogic.getCurrentGame(model.GroupID).PokerGameID == Guid.Empty) // NO GAME - redirect to home page
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
         }
 
         [Authorize]
-        public ActionResult Leaderboard()
+        public ActionResult Dashboard()
         {
-            return View();
+            Guid.TryParse(User.Identity.GetUserId(), out Guid userID);
+
+            if (userID == null)
+            {
+                return View("Index", "Home");
+            }
+
+            return View(GeneralLogic.getGroups(userID));
+        }
+
+        [Authorize]
+        public ActionResult Leaderboard(string groupName)
+        {
+            GroupModel model = GeneralLogic.getGroup(groupName);
+
+            if (model == null) // bad link
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (GeneralLogic.getCurrentGame(model.GroupID).PokerGameID == Guid.Empty) // NO GAME - redirect to home page
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
         }
     }
 }

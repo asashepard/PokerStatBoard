@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
-using Microsoft.SqlServer.Server;
 using PokerStatBoard.Models;
 using PokerStatBoard.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using PokerStatBoard.Logic;
 
 namespace PokerStatBoard.Controllers
 {
@@ -37,7 +33,7 @@ namespace PokerStatBoard.Controllers
             }
         }
 
-        public ActionResult Index()
+        public ActionResult GroupName(string groupName)
         {
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
@@ -52,29 +48,40 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "NoPermission");
             }
 
-            return View();
+            GroupModel group = GeneralLogic.getGroup(groupName);
+
+            if (group == null)
+            {
+                return RedirectToAction("Game", "Home");
+            }
+
+            AddPlayerVM model = new AddPlayerVM
+            {
+                GroupName = group.Name,
+            };
+
+            return View(model);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SubmitAddPlayerForm(AddPlayerVM formData)
         {
-            ApplicationDbContext dbContext = new ApplicationDbContext();
-
-            foreach (PlayerModel player in dbContext.Players)
+            using (ApplicationDbContext dbContext = new ApplicationDbContext())
             {
-                if (player.Name == formData.Name) // Name already exists
+                GroupModel group = GeneralLogic.getGroup(formData.GroupName);
+
+                if (group == null)
                 {
                     return RedirectToAction("Game", "Home");
                 }
+
+                PlayerModel model = new PlayerModel(formData.Name, group.GroupID);
+                dbContext.Players.Add(model);
+                dbContext.SaveChanges();
             }
 
-            PlayerModel model = new PlayerModel(formData.Name);
-
-            dbContext.Players.Add(model);
-
-            dbContext.SaveChanges();
-
-            return RedirectToAction("Game", "Home");
+            return RedirectToAction("GroupName", "Game", new { groupName = formData.GroupName });
         }
     }
 }

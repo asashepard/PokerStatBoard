@@ -1,6 +1,6 @@
-@model PokerStatBoard.ViewModels.AddPlayerVM
+@model PokerStatBoard.ViewModels.CreateGroupVM
 @{
-    ViewBag.Title = "Add a new player";
+    ViewBag.Title = "Create a new group";
 }
 
 <main aria-labelledby="title">
@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h2 class="card-title text-center" id="title">@ViewBag.Title</h2>
                 <hr />
-                @using (Html.BeginForm("SubmitAddPlayerForm", "AddPlayer", FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("SubmitCreateGroupForm", "CreateGroup", FormMethod.Post, new { role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     <div class="row justify-content-center align-items-center">
@@ -29,11 +29,6 @@
                         </div>
                     </div>
                 }
-                <div class="mb-3 row mt-4 justify-content-center">
-                    <div class="col-sm-12 text-center">
-                        <h4>Once a player has been added, they can join any ongoing game and their statistics will be tracked</h4>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

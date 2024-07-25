@@ -1,5 +1,6 @@
-﻿@{
-        ViewBag.Title = "Game";
+@model PokerStatBoard.Models.GroupModel
+@{
+    ViewBag.Title = "Game";
 }
 
 <!DOCTYPE html>
@@ -11,25 +12,25 @@
 <body onload="stopWatch()">
     <main class="container-fluid mt-5">
         <script>
-            function addPlayerRedirect() {
-                var url = '@Url.Action("Index", "AddPlayer")';
+            function addPlayerRedirect(groupName) {
+                const url = '@Url.Action("GroupName", "AddPlayer", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
                 window.location.href = url;
             }
-            function joinPlayerRedirect() {
-                var url = '@Url.Action("Index", "JoinPlayer")';
+            function joinPlayerRedirect(groupName) {
+                const url = '@Url.Action("GroupName", "JoinPlayer", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
                 window.location.href = url;
             }
-            function cashOutPlayerRedirect() {
-                var url = '@Url.Action("Index", "CashOutPlayer")';
+            function cashOutPlayerRedirect(groupName) {
+                const url = '@Url.Action("GroupName", "CashOutPlayer", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
                 window.location.href = url;
             }
-            function endGameRedirect() {
-                var url = '@Url.Action("Index", "EndGame")';
+            function endGameRedirect(groupName) {
+                const url = '@Url.Action("GroupName", "EndGame", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
                 window.location.href = url;
             }
-            let hour = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Hours);
-            let minute = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Minutes);
-            let second = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).Seconds);
+            let hour = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame(Model.GroupID).StartDateTime).Hours);
+            let minute = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame(Model.GroupID).StartDateTime).Minutes);
+            let second = @((DateTime.Now - PokerStatBoard.Logic.GeneralLogic.getCurrentGame(Model.GroupID).StartDateTime).Seconds);
             function stopWatch() {
                 second++;
                 if (second == 60) {
@@ -72,7 +73,7 @@
                         <div class="card-body p-0">
                             <table class="table table-striped bg-transparent table-borderless table-hover">
                                 <tbody>
-                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns().Count == 0)
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns(Model.GroupID).Count == 0)
                                     {
                                         <tr>
                                             <td class="text-center">none yet</td>
@@ -80,10 +81,10 @@
                                     }
                                     else
                                     {
-                                        foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns())
+                                        foreach (PokerStatBoard.Models.BuyInModel buyIn in PokerStatBoard.Logic.GeneralLogic.getCurrentBuyIns(Model.GroupID))
                                         {
                                             <tr>
-                                                <td class="text-start fs-5">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                                <td class="text-start fs-5">@((buyIn.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame(Model.GroupID).StartDateTime).ToString().Split('.')[0])</td>
                                                 <td class="text-start fs-5">@PokerStatBoard.Logic.GeneralLogic.getPlayer(buyIn.PlayerID).Name</td>
                                                 <td class="text-end fs-5">$@buyIn.Amount</td>
                                             </tr>
@@ -100,7 +101,7 @@
                         <div class="card-body p-0">
                             <table class="table table-striped bg-transparent table-borderless table-hover">
                                 <tbody>
-                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts().Count == 0)
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts(Model.GroupID).Count == 0)
                                     {
                                         <tr>
                                             <td class="text-center">none yet</td>
@@ -108,10 +109,10 @@
                                     }
                                     else
                                     {
-                                        foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts())
+                                        foreach (PokerStatBoard.Models.CashOutModel cashOut in PokerStatBoard.Logic.GeneralLogic.getCurrentCashOuts(Model.GroupID))
                                         {
                                             <tr>
-                                                <td class="text-start fs-5">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame().StartDateTime).ToString().Split('.')[0])</td>
+                                                <td class="text-start fs-5">@((cashOut.DateTime - PokerStatBoard.Logic.GeneralLogic.getCurrentGame(Model.GroupID).StartDateTime).ToString().Split('.')[0])</td>
                                                 <td class="text-start fs-5">@PokerStatBoard.Logic.GeneralLogic.getPlayer(cashOut.PlayerID).Name</td>
                                                 <td class="text-end fs-5">$@cashOut.Amount</td>
                                             </tr>
@@ -126,7 +127,7 @@
             <div class="col-lg-4 mb-4 text-center">
                 <div class="card bg-custom-1 rounded-4 overflow-hidden d-flex flex-column" style="height: 80vh;">
                     <div class="card-header fs-3 text-center bg-dark text-light fw-semibold mb-4">
-                        AP3 Poker Live
+                        @Model.Name
                     </div>
                     <div class="d-flex flex-column justify-content-around align-items-center flex-grow-1">
                         <div class="row w-100 mb-2">
@@ -138,12 +139,12 @@
                         <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
                         <div class="row w-100 mt-2 mb-2">
                             <div class="fs-4 col-12">On Table</div>
-                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(), 2))</div>
+                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(Model.GroupID), 2))</div>
                         </div>
                         <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
                         <div class="row w-100 mt-2 mb-2">
                             <div class="fs-4 col-12">Avg. Stack</div>
-                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable() / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count), 2))</div>
+                            <div class="fs-2 col-12">$@(Math.Round(PokerStatBoard.Logic.GeneralLogic.getAmountOnTable(Model.GroupID) / (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers(Model.GroupID).Count == 0 ? 1 : PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers(Model.GroupID).Count), 2))</div>
                         </div>
                         <div class="w-100" style="height: 4px; background-color: #2d2d2d"></div>
                         <div class="row w-100 mt-2 mb-2">
@@ -165,7 +166,7 @@
                         <div class="card-body p-0">
                             <table class="table table-striped bg-transparent table-borderless table-hover">
                                 <tbody>
-                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers().Count == 0)
+                                    @if (PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers(Model.GroupID).Count == 0)
                                     {
                                         <tr>
                                             <td class="text-center">no one</td>
@@ -173,7 +174,7 @@
                                     }
                                     else
                                     {
-                                        foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers())
+                                        foreach (PokerStatBoard.Models.PlayerModel player in PokerStatBoard.Logic.GeneralLogic.getCurrentPlayers(Model.GroupID))
                                         {
                                             <tr>
                                                 <td class="text-start fs-5">@player.Name</td>
@@ -189,10 +190,10 @@
                         <div class="container h-100">
                             <div class="row h-50">
                                 <div class="col-6 d-flex align-items-center justify-content-center">
-                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="joinPlayerRedirect()">Buy In Player</button>
+                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="joinPlayerRedirect('@Model.Name')">Buy In Player</button>
                                 </div>
                                 <div class="col-6 d-flex align-items-center justify-content-center">
-                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="cashOutPlayerRedirect()">Cash Out Player</button>
+                                    <button class="btn btn-outline-dark w-100 h-75 mt-2 rounded-4 fw-semibold" style="border-width: 4px; font-size: 0.75rem;" onclick="cashOutPlayerRedirect('@Model.Name')">Cash Out Player</button>
                                 </div>
                             </div>
                             <div class="row h-50">
@@ -205,7 +206,7 @@
                             </div>
                         </div>
                     </div>
-            </div>
+                </div>
 
                 <div class="modal fade" id="confirmation">
                     <div class="modal-dialog">
@@ -219,7 +220,7 @@
                                 <p>Note: The game cannot end until all players have cashed out.</p>
                             </div>
                             <div class="modal-footer">
-                                <button id="modal_button" class="btn btn-primary" onclick="endGameRedirect()">Yes</button>
+                                <button id="modal_button" class="btn btn-primary" onclick="endGameRedirect('@Model.Name')">Yes</button>
                                 <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
                             </div>
                         </div>
@@ -239,7 +240,7 @@
                                 <p>If they appear on the leaderboard, they have been added.</p>
                             </div>
                             <div class="modal-footer">
-                                <button id="modal_button" class="btn btn-primary" onclick="addPlayerRedirect()">Yes</button>
+                                <button id="modal_button" class="btn btn-primary" onclick="addPlayerRedirect('@Model.Name')">Yes</button>
                                 <button id="modal_button" class="btn btn-secondary" data-bs-target="#confirmation-2" data-bs-toggle="modal" data-bs-dismiss="modal">No</button>
                             </div>
                         </div>
@@ -247,5 +248,5 @@
                 </div>
             </div>
         </div>
-</main>
+    </main>
 </body>

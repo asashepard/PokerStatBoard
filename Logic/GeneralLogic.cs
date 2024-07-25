@@ -4,40 +4,29 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace PokerStatBoard.Logic
 {
     public class GeneralLogic
     {
-        public static void Init()
-        {
-            ApplicationDbContext dbContext = new ApplicationDbContext();
-
-            if (dbContext.CurrentGame == null)
-            {
-                CurrentGameModel currentGame = new CurrentGameModel();
-                dbContext.CurrentGame.Add(currentGame);
-                dbContext.SaveChanges();
-            }
-        }
-
-        public static decimal getAmountOnTable()
+        public static decimal getAmountOnTable(Guid groupID)
         {
             decimal amount = 0;
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - no money on table, return 0
+            PokerGameModel currentGame = getCurrentGame(groupID);
+
+            if (currentGame == null) // NO GAME - no money on table, return 0
             {
                 return 0;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach(BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PokerGameID != currentGame)
+                if (buyIn.PokerGameID != currentGame.PokerGameID)
                 {
                     continue;
                 }
@@ -46,7 +35,7 @@ namespace PokerStatBoard.Logic
 
             foreach (CashOutModel cashOut in dbContext.CashOuts)
             {
-                if (cashOut.PokerGameID != currentGame)
+                if (cashOut.PokerGameID != currentGame.PokerGameID)
                 {
                     continue;
                 }
@@ -56,21 +45,25 @@ namespace PokerStatBoard.Logic
             return amount;
         }
 
-        public static List<PlayerModel> getCurrentPlayers()
+        public static List<PlayerModel> getCurrentPlayers(Guid groupID)
         {
             List<PlayerModel> players = new List<PlayerModel>();
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
+            PokerGameModel currentGame = getCurrentGame(groupID);
+
+            if (currentGame == null) // NO GAME - return
             {
                 return players;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (PlayerModel player in dbContext.Players)
             {
+                if (player.GroupID != groupID)
+                {
+                    continue;
+                }
                 if (player.IsPlaying)
                 {
                     players.Add(player);
@@ -86,16 +79,16 @@ namespace PokerStatBoard.Logic
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return 0
+            PokerGameModel currentGame = getCurrentGame(player.GroupID);
+
+            if (currentGame == null) // NO GAME - return 0
             {
                 return amount;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PokerGameID != currentGame || buyIn.PlayerID != player.PlayerID)
+                if (buyIn.PokerGameID != currentGame.PokerGameID || buyIn.PlayerID != player.PlayerID)
                 {
                     continue;
                 }
@@ -104,7 +97,7 @@ namespace PokerStatBoard.Logic
 
             foreach (CashOutModel cashOut in dbContext.CashOuts)
             {
-                if (cashOut.PokerGameID != currentGame || cashOut.PlayerID != player.PlayerID)
+                if (cashOut.PokerGameID != currentGame.PokerGameID || cashOut.PlayerID != player.PlayerID)
                 {
                     continue;
                 }
@@ -114,22 +107,22 @@ namespace PokerStatBoard.Logic
             return amount;
         }
 
-        public static List<BuyInModel> getCurrentBuyIns()
+        public static List<BuyInModel> getCurrentBuyIns(Guid groupID)
         {
             List<BuyInModel> buyInModels = new List<BuyInModel>();
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
+            PokerGameModel currentGame = getCurrentGame(groupID);
+
+            if (currentGame == null) // NO GAME - return
             {
                 return buyInModels;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PokerGameID != currentGame)
+                if (buyIn.PokerGameID != currentGame.PokerGameID)
                 {
                     continue;
                 }
@@ -144,22 +137,22 @@ namespace PokerStatBoard.Logic
             return buyInModels;
         }
 
-        public static List<CashOutModel> getCurrentCashOuts()
+        public static List<CashOutModel> getCurrentCashOuts(Guid groupID)
         {
             List<CashOutModel> cashOutModels = new List<CashOutModel>();
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO GAME - return
+            PokerGameModel currentGame = getCurrentGame(groupID);
+
+            if (currentGame == null) // NO GAME - return
             {
                 return cashOutModels;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (CashOutModel cashOut in dbContext.CashOuts)
             {
-                if (cashOut.PokerGameID != currentGame)
+                if (cashOut.PokerGameID != currentGame.PokerGameID)
                 {
                     continue;
                 }
@@ -174,11 +167,25 @@ namespace PokerStatBoard.Logic
             return cashOutModels;
         }
 
-        public static PokerGameModel getCurrentGame()
+        public static PokerGameModel getCurrentGame(Guid groupID)
         {
             ApplicationDbContext context = new ApplicationDbContext();
 
-            return context.PokerGames.FirstOrDefault(g => g.PokerGameID == context.CurrentGame.FirstOrDefault().PokerGameID);
+            return context.PokerGames.FirstOrDefault(game => game.PokerGameID == context.Groups.FirstOrDefault(group => group.GroupID == groupID).PokerGameID);
+        }
+
+        public static GroupModel getGroup(Guid groupID)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.Groups.FirstOrDefault(g => g.GroupID == groupID);
+        }
+
+        public static GroupModel getGroup(string name)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            return context.Groups.FirstOrDefault(g => g.Name == name);
         }
 
         public static PlayerModel getPlayer(Guid playerID)
@@ -202,6 +209,42 @@ namespace PokerStatBoard.Logic
             return context.Players.ToList();
         }
 
+        public static List<PlayerModel> getAllPlayers(Guid groupID)
+        {
+            ApplicationDbContext context = new ApplicationDbContext();
+
+            List<PlayerModel> players = new List<PlayerModel>();
+
+            foreach (PlayerModel p in context.Players)
+            {
+                if (p.GroupID != groupID)
+                {
+                    continue;
+                }
+                players.Add(p);
+            }
+
+            return players;
+        }
+
+        public static List<GroupModel> getGroups(Guid userID)
+        {
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            List<GroupModel> groups = new List<GroupModel>();
+
+            foreach (AppUserGroupModel m in dbContext.AppUserGroups)
+            {
+                if (m.ApplicationUserID != userID)
+                {
+                    continue;
+                }
+                groups.Add(getGroup(m.GroupID));
+            }
+
+            return groups;
+        }
+
         public static decimal getPlusMinus(Guid playerID)
         {
             decimal amount = 0;
@@ -210,16 +253,16 @@ namespace PokerStatBoard.Logic
 
             bool checkGame = false;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // GAME - check game
+            PokerGameModel currentGame = getCurrentGame(getPlayer(playerID).GroupID);
+
+            if (currentGame != null) // GAME - check game
             {
                 checkGame = true;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame)) // exclude changes from current game
+                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame.PokerGameID)) // exclude changes from current game
                 {
                     continue;
                 }
@@ -228,7 +271,7 @@ namespace PokerStatBoard.Logic
 
             foreach (CashOutModel cashOut in dbContext.CashOuts)
             {
-                if (cashOut.PlayerID != playerID || (checkGame && cashOut.PokerGameID == currentGame)) // exclude changes from current game
+                if (cashOut.PlayerID != playerID || (checkGame && cashOut.PokerGameID == currentGame.PokerGameID)) // exclude changes from current game
                 {
                     continue;
                 }
@@ -274,16 +317,16 @@ namespace PokerStatBoard.Logic
 
             bool checkGame = false;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // GAME - check game
+            PokerGameModel currentGame = getCurrentGame(getPlayer(playerID).GroupID);
+
+            if (currentGame != null) // GAME - check game
             {
                 checkGame = true;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame))
+                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame.PokerGameID))
                 {
                     continue;
                 }
@@ -319,16 +362,16 @@ namespace PokerStatBoard.Logic
 
             bool checkGame = false;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // GAME - check game
+            PokerGameModel currentGame = getCurrentGame(getPlayer(playerID).GroupID);
+
+            if (currentGame != null) // GAME - check game
             {
                 checkGame = true;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (CashOutModel cashOut in dbContext.CashOuts)
             {
-                if (cashOut.PlayerID != playerID || (checkGame && cashOut.PokerGameID == currentGame))
+                if (cashOut.PlayerID != playerID || (checkGame && cashOut.PokerGameID == currentGame.PokerGameID))
                 {
                     continue;
                 }
@@ -364,16 +407,16 @@ namespace PokerStatBoard.Logic
 
             bool checkGame = false;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // GAME - check game
+            PokerGameModel currentGame = getCurrentGame(getPlayer(playerID).GroupID);
+
+            if (currentGame != null) // GAME - check game
             {
                 checkGame = true;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PlayerID != playerID || pokerGameIds.Contains(buyIn.PokerGameID) || (checkGame && buyIn.PokerGameID == currentGame))
+                if (buyIn.PlayerID != playerID || pokerGameIds.Contains(buyIn.PokerGameID) || (checkGame && buyIn.PokerGameID == currentGame.PokerGameID))
                 {
                     continue;
                 }
@@ -416,17 +459,17 @@ namespace PokerStatBoard.Logic
 
             bool checkGame = false;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // GAME - check game
+            PokerGameModel currentGame = getCurrentGame(getPlayer(playerID).GroupID);
+
+            if (currentGame != null) // GAME - check game
             {
                 checkGame = true;
             }
 
-            Guid currentGame = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
-
             // populate all buy ins and sort by DateTime
             foreach (BuyInModel buyIn in dbContext.BuyIns)
             {
-                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame))
+                if (buyIn.PlayerID != playerID || (checkGame && buyIn.PokerGameID == currentGame.PokerGameID))
                 {
                     continue;
                 }

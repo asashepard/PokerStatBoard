@@ -39,6 +39,11 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("Game", "Home");
+        }
+
+        public ActionResult GroupName(string groupName)
+        {
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
 
@@ -52,7 +57,19 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "NoPermission");
             }
 
-            return View();
+            GroupModel groupModel = GeneralLogic.getGroup(groupName);
+
+            if (groupModel == null)
+            {
+                return RedirectToAction("Game", "Home");
+            }
+
+            CashOutPlayerVM model = new CashOutPlayerVM
+            {
+                Group = groupModel
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -64,36 +81,35 @@ namespace PokerStatBoard.Controllers
 
             if (!success) // Can't cash out player
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault() == null) // populate CurrentGame if necessary
-            {
-                CurrentGameModel current_model = new CurrentGameModel();
-                dbContext.CurrentGame.Add(current_model);
-                dbContext.SaveChanges();
-            }
+            Guid groupID = GeneralLogic.getPlayer(playerID).GroupID;
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO CURRENT GAME - redirect to home page
+            PokerGameModel currentGame = GeneralLogic.getCurrentGame(groupID);
+
+            if (currentGame == null) // bad link
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             decimal amount = formData.Amount;
 
-            decimal onTable = GeneralLogic.getAmountOnTable();
+            decimal onTable = GeneralLogic.getAmountOnTable(groupID);
 
             if (amount > onTable)
             {
                 amount = onTable; // prevent cashing out for more than is on table
             }
 
-            if (GeneralLogic.getCurrentPlayers().Count == 1)
+            if (GeneralLogic.getCurrentPlayers(groupID).Count == 1)
             {
                 amount = onTable; // make sure all money is accounted for by giving remainder to last player
             }
 
-            CashOutModel model = new CashOutModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, amount);
+            GroupModel group = GeneralLogic.getGroup(groupID);
+
+            CashOutModel model = new CashOutModel(currentGame.PokerGameID, playerID, amount);
 
             dbContext.CashOuts.Add(model);
 
@@ -101,7 +117,7 @@ namespace PokerStatBoard.Controllers
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Game", "Home");
+            return RedirectToAction("GroupName", "Game", new { groupName = group.Name });
         }
     }
 }

@@ -37,12 +37,17 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("Game", "Home");
+        }
+
+        public ActionResult GroupName(string groupName)
+        {
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
 
             if (user == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             if (user.accessLevel < 1)
@@ -52,32 +57,32 @@ namespace PokerStatBoard.Controllers
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault() == null) // populate CurrentGame if necessary
+            GroupModel group = GeneralLogic.getGroup(groupName);
+
+            if (group == null)
             {
-                CurrentGameModel current_model = new CurrentGameModel();
-                dbContext.CurrentGame.Add(current_model);
-                dbContext.SaveChanges();
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO CURRENT GAME - redirect to home page
+            if (group.PokerGameID == Guid.Empty) // NO CURRENT GAME - redirect to home page
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            PokerGameModel model = dbContext.PokerGames.FirstOrDefault(m => m.PokerGameID.Equals(dbContext.CurrentGame.FirstOrDefault().PokerGameID));
+            PokerGameModel model = GeneralLogic.getCurrentGame(group.GroupID);
 
-            if (model == null) // ERROR - game not found from CurrentGame entry, redirect to home
+            if (model == null) // ERROR - game not found, redirect to home
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (GeneralLogic.getCurrentPlayers().Count() > 0) // Players still left at the table that need cashing out
+            if (GeneralLogic.getCurrentPlayers(group.GroupID).Count() > 0) // Players still left at the table that need cashing out
             {
-                return RedirectToAction("Index", "CashOutPlayer");
+                return RedirectToAction("GroupName", "CashOutPlayer", new { groupName = group.Name });
             }
 
             model.EndDateTime = DateTime.Now;
-            dbContext.CurrentGame.FirstOrDefault().PokerGameID = Guid.Empty;
+            group.PokerGameID = Guid.Empty;
 
             foreach (PlayerModel player in dbContext.Players)
             {
@@ -89,7 +94,7 @@ namespace PokerStatBoard.Controllers
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
     }
 }

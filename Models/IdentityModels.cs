@@ -30,7 +30,9 @@ namespace PokerStatBoard.Models
 
         public DbSet<CashOutModel> CashOuts { get; set; }
 
-        public DbSet<CurrentGameModel> CurrentGame { get; set; }
+        public DbSet<GroupModel> Groups { get; set; }
+
+        public DbSet<AppUserGroupModel> AppUserGroups { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

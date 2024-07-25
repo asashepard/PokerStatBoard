@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PokerStatBoard.Logic;
 
 namespace PokerStatBoard.Controllers
 {
@@ -37,6 +38,11 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("Game", "Home");
+        }
+
+        public ActionResult GroupName(string groupName)
+        {
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
 
@@ -50,7 +56,19 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "NoPermission");
             }
 
-            return View();
+            GroupModel groupModel = GeneralLogic.getGroup(groupName);
+
+            if (groupModel == null)
+            {
+                return RedirectToAction("Game", "Home");
+            }
+
+            JoinPlayerVM model = new JoinPlayerVM
+            {
+                Group = groupModel
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -62,22 +80,21 @@ namespace PokerStatBoard.Controllers
 
             if (!success) // Can't join player
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault() == null) // populate CurrentGame if necessary
+            Guid groupID = GeneralLogic.getPlayer(playerID).GroupID;
+
+            PokerGameModel currentGame = GeneralLogic.getCurrentGame(groupID);
+
+            if (currentGame == null) // bad link
             {
-                CurrentGameModel current_model = new CurrentGameModel();
-                dbContext.CurrentGame.Add(current_model);
-                dbContext.SaveChanges();
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID == Guid.Empty) // NO CURRENT GAME - redirect to home page
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            GroupModel group = GeneralLogic.getGroup(groupID);
 
-            BuyInModel model = new BuyInModel(dbContext.CurrentGame.FirstOrDefault().PokerGameID, playerID, formData.Amount);
+            BuyInModel model = new BuyInModel(currentGame.PokerGameID, playerID, formData.Amount);
 
             dbContext.BuyIns.Add(model);
 
@@ -85,7 +102,7 @@ namespace PokerStatBoard.Controllers
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Game", "Home");
+            return RedirectToAction("GroupName", "Game", new { groupName = group.Name });
         }
     }
 }

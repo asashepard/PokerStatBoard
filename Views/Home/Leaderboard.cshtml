@@ -1,3 +1,4 @@
+@model PokerStatBoard.Models.GroupModel
 @{
     ViewBag.Title = "Leaderboard";
 }
@@ -80,7 +81,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var (player, index) in PokerStatBoard.Logic.GeneralLogic.getAllPlayers().Select((player, index) => (player, index + 1)))
+                                        @foreach (var (player, index) in PokerStatBoard.Logic.GeneralLogic.getAllPlayers(Model.GroupID).Select((player, index) => (player, index + 1)))
                                         {
                                             <tr>
                                                 <td>@index</td>

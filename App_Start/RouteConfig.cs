@@ -20,6 +20,24 @@ namespace PokerStatBoard
             );
 
             routes.MapRoute(
+                "StartGame",
+                "StartGame/{groupName}",
+                new { controller = "StartGame", action = "GroupName" }
+            );
+
+            routes.MapRoute(
+                "EndGame",
+                "EndGame/{groupName}",
+                new { controller = "EndGame", action = "GroupName" }
+            );
+
+            routes.MapRoute(
+                "Game",
+                "Game/{groupName}",
+                new { controller = "Game", action = "GroupName" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

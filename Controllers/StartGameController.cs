@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.SqlServer.Server;
+using PokerStatBoard.Logic;
 using PokerStatBoard.Models;
 using PokerStatBoard.ViewModels;
 using System;
@@ -39,26 +40,31 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult GroupName(string groupName)
+        {
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
 
             if (user == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction(groupName, "Game");
             }
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
-            if (dbContext.CurrentGame.FirstOrDefault() == null) // populate CurrentGame if necessary
+            GroupModel group = GeneralLogic.getGroup(groupName);
+
+            if (group == null)
             {
-                CurrentGameModel current_model = new CurrentGameModel();
-                dbContext.CurrentGame.Add(current_model);
-                dbContext.SaveChanges();
+                return RedirectToAction(groupName, "Game");
             }
 
-            if (dbContext.CurrentGame.FirstOrDefault().PokerGameID != Guid.Empty) // CURRENT GAME - redirect to game page for ongoing game
+            if (group.PokerGameID != Guid.Empty) // CURRENT GAME - redirect to game page for ongoing game
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction(groupName, "Game");
             }
 
             if (user.accessLevel < 1)
@@ -69,11 +75,11 @@ namespace PokerStatBoard.Controllers
             PokerGameModel model = new PokerGameModel();
 
             dbContext.PokerGames.Add(model);
-            dbContext.CurrentGame.FirstOrDefault().PokerGameID = model.PokerGameID;
+            dbContext.Groups.FirstOrDefault(g => g.GroupID == group.GroupID).PokerGameID = model.PokerGameID;
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Game", "Home");
+            return RedirectToAction(groupName, "Game");
         }
     }
 }

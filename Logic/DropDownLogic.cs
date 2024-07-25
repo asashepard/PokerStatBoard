@@ -9,7 +9,7 @@ namespace PokerStatBoard.Logic
 {
     public class DropDownLogic
     {
-        public static List<SelectListItem> GetPlayers()
+        public static List<SelectListItem> GetPlayers(Guid groupID)
         {
             List<SelectListItem> outputList = new List<SelectListItem>();
 
@@ -18,6 +18,11 @@ namespace PokerStatBoard.Logic
 
             foreach (PlayerModel player in players)
             {
+                if (player.GroupID != groupID)
+                {
+                    continue;
+                }
+
                 SelectListItem selectListItem = new SelectListItem();
 
                 selectListItem.Text = player.Name;
@@ -29,14 +34,19 @@ namespace PokerStatBoard.Logic
             return outputList;
         }
 
-        public static List<SelectListItem> GetPlayersCurrentlyPlaying()
+        public static List<SelectListItem> GetPlayersCurrentlyPlaying(Guid groupID)
         {
             List<SelectListItem> outputList = new List<SelectListItem>();
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
             List<BuyInModel> buyIns = dbContext.BuyIns.ToList();
             List<CashOutModel> cashOuts = dbContext.CashOuts.ToList();
-            Guid currentGameId = dbContext.CurrentGame.FirstOrDefault().PokerGameID;
+            Guid currentGameId = GeneralLogic.getCurrentGame(groupID).PokerGameID;
+
+            if (currentGameId == Guid.Empty)
+            {
+                return outputList;
+            }
 
             List<PlayerModel> currentPlayers = new List<PlayerModel>();
             foreach (BuyInModel buyIn in buyIns)
@@ -71,6 +81,29 @@ namespace PokerStatBoard.Logic
 
                 selectListItem.Text = player.Name;
                 selectListItem.Value = player.PlayerID.ToString();
+
+                outputList.Add(selectListItem);
+            }
+
+            return outputList;
+        }
+
+        public static List<SelectListItem> GetGroups(Guid userID)
+        {
+            List<SelectListItem> outputList = new List<SelectListItem>();
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+            List<BuyInModel> buyIns = dbContext.BuyIns.ToList();
+            List<CashOutModel> cashOuts = dbContext.CashOuts.ToList();
+
+            List<GroupModel> groups = GeneralLogic.getGroups(userID);
+
+            foreach (GroupModel g in groups)
+            {
+                SelectListItem selectListItem = new SelectListItem();
+
+                selectListItem.Text = g.Name;
+                selectListItem.Value = g.GroupID.ToString();
 
                 outputList.Add(selectListItem);
             }

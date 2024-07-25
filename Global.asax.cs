@@ -17,7 +17,6 @@ namespace PokerStatBoard
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             EmailServiceCredentials.PopulateEmailCredentialsFromAppConfig();
-            PokerStatBoard.Logic.GeneralLogic.Init();
         }
     }
 }
