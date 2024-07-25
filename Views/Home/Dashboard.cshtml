@@ -22,7 +22,8 @@
     }
 
     function editGroup(groupName) {
-        // Add your edit group logic here
+        const url = '@Url.Action("GroupName", "GroupAccess", new { groupName = "__groupName__" })'.replace('__groupName__', encodeURIComponent(groupName));
+        window.location.href = url;
     }
 </script>
 
@@ -68,7 +69,7 @@
                             <button class="btn btn-outline-dark rounded-pill mb-2 mb-md-0 me-2" onclick="viewLeaderboard('@group.Name')">Leaderboard</button>
                             <button class="btn btn-outline-secondary rounded-pill mb-2 mb-md-0 me-2" onclick="copyInvite('@group.Name')">Copy Invite</button>
                             <button class="btn btn-outline-danger rounded-pill mb-2 mb-md-0 me-2" onclick="leaveGroup('@group.Name')">Leave</button>
-                            <button class="btn btn-outline-warning rounded-pill mb-2 mb-md-0" onclick="editGroup('@group.Name')">Edit</button>
+                            <button class="btn btn-outline-warning rounded-pill mb-2 mb-md-0" onclick="editGroup('@group.Name')">Edit Access</button>
                         </div>
                     </div>
                 </div>

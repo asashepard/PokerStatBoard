@@ -59,7 +59,7 @@ namespace PokerStatBoard.Controllers
 
             dbContext.Groups.Add(group);
 
-            dbContext.AppUserGroups.Add(new AppUserGroupModel(userID, group.GroupID));
+            dbContext.AppUserGroups.Add(new AppUserGroupModel(userID, group.GroupID, 2)); // 2 = owner
 
             dbContext.SaveChanges();
 

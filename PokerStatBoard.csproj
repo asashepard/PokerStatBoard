@@ -174,13 +174,13 @@
     <Compile Include="Controllers\CashOutPlayerController.cs" />
     <Compile Include="Controllers\EndGameController.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\GroupAccessController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JoinPlayerController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NoPermissionController.cs" />
     <Compile Include="Controllers\PlayerStatsController.cs" />
     <Compile Include="Controllers\StartGameController.cs" />
-    <Compile Include="Controllers\ViewUsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,6 +213,10 @@
     <Compile Include="Migrations\202407250318277_Implement-Groups.cs" />
     <Compile Include="Migrations\202407250318277_Implement-Groups.Designer.cs">
       <DependentUpon>202407250318277_Implement-Groups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407250915343_Move-AccessLevel.cs" />
+    <Compile Include="Migrations\202407250915343_Move-AccessLevel.Designer.cs">
+      <DependentUpon>202407250915343_Move-AccessLevel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -301,11 +305,11 @@
     <Content Include="Views\CashOutPlayer\GroupName.cshtml" />
     <Content Include="Views\Home\Leaderboard.cshtml" />
     <Content Include="Views\PlayerStats\Name.cshtml" />
-    <Content Include="Views\ViewUsers\Index.cshtml" />
     <Content Include="Views\NoPermission\Index.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\CreateGroup\Index.cshtml" />
     <Content Include="Views\Game\GroupName.cshtml" />
+    <Content Include="Views\GroupAccess\GroupName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -358,6 +362,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202407250318277_Implement-Groups.resx">
       <DependentUpon>202407250318277_Implement-Groups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407250915343_Move-AccessLevel.resx">
+      <DependentUpon>202407250915343_Move-AccessLevel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

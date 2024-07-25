@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
-using PokerStatBoard.Logic;
 using PokerStatBoard.Models;
+using PokerStatBoard.ViewModels;
+using System.Web;
+using System.Web.Mvc;
+using PokerStatBoard.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace PokerStatBoard.Controllers
 {
-    public class EndGameController : Controller
+    public class GroupAccessController : Controller
     {
         private ApplicationUserManager _userManager;
 
-        public EndGameController()
+        public GroupAccessController()
         {
         }
 
-        public EndGameController(ApplicationUserManager userManager)
+        public GroupAccessController (ApplicationUserManager userManager)
         {
             UserManager = userManager;
         }
@@ -33,11 +34,6 @@ namespace PokerStatBoard.Controllers
             {
                 _userManager = value;
             }
-        }
-
-        public ActionResult Index()
-        {
-            return RedirectToAction("Game", "Home");
         }
 
         public ActionResult GroupName(string groupName)
@@ -62,8 +58,6 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Index", "NoPermission");
             }
 
-            ApplicationDbContext dbContext = new ApplicationDbContext();
-
             GroupModel group = GeneralLogic.getGroup(groupName);
 
             if (group == null)
@@ -71,35 +65,31 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Dashboard", "Home");
             }
 
-            if (group.PokerGameID == Guid.Empty) // NO CURRENT GAME - redirect to home page
+            return View(GeneralLogic.getAppUserGroupModels(group.GroupID));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateAccessLevels(List<AppUserGroupModel> userGroupModels)
+        {
+            if (userGroupModels == null)
             {
                 return RedirectToAction("Dashboard", "Home");
             }
 
-            PokerGameModel model = GeneralLogic.getCurrentGame(group.GroupID);
+            ApplicationDbContext context = new ApplicationDbContext();
 
-            if (model == null) // ERROR - game not found, redirect to home
+            foreach (AppUserGroupModel model in context.AppUserGroups)
             {
-                return RedirectToAction("Dashboard", "Home");
-            }
-
-            if (GeneralLogic.getCurrentPlayers(group.GroupID).Count() > 0) // Players still left at the table that need cashing out
-            {
-                return RedirectToAction("GroupName", "CashOutPlayer", new { groupName = group.Name });
-            }
-
-            model.EndDateTime = DateTime.Now;
-            group.PokerGameID = Guid.Empty;
-
-            foreach (PlayerModel player in dbContext.Players)
-            {
-                if (player.IsPlaying)
+                if (!userGroupModels.Contains(model))
                 {
-                    player.IsPlaying = false;
+                    continue;
                 }
+
+                model.AccessLevel = userGroupModels.FirstOrDefault(m => m.ApplicationUserGroupID == model.ApplicationUserGroupID).AccessLevel;
             }
 
-            dbContext.SaveChanges();
+            context.SaveChanges();
 
             return RedirectToAction("Dashboard", "Home");
         }

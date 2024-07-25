@@ -51,7 +51,14 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("Game", "Home");
             }
 
-            if (user.accessLevel < 1)
+            Guid.TryParse(userId, out Guid id);
+
+            if (id == null)
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            if (GeneralLogic.getAccessLevel(id, GeneralLogic.getGroup(groupName).GroupID) < 1)
             {
                 return RedirectToAction("Index", "NoPermission");
             }

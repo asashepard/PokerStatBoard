@@ -5,6 +5,7 @@ using PokerStatBoard.ViewModels;
 using System.Web;
 using System.Web.Mvc;
 using PokerStatBoard.Logic;
+using System;
 
 namespace PokerStatBoard.Controllers
 {
@@ -40,10 +41,17 @@ namespace PokerStatBoard.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (user.accessLevel < 1)
+            Guid.TryParse(userId, out Guid id);
+
+            if (id == null)
+            {
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            if (GeneralLogic.getAccessLevel(id, GeneralLogic.getGroup(groupName).GroupID) < 1)
             {
                 return RedirectToAction("Index", "NoPermission");
             }
@@ -52,7 +60,7 @@ namespace PokerStatBoard.Controllers
 
             if (group == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             AddPlayerVM model = new AddPlayerVM

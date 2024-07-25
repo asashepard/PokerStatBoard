@@ -110,5 +110,21 @@ namespace PokerStatBoard.Logic
 
             return outputList;
         }
+        public static List<SelectListItem> GetGroupAccessLevels(int to)
+        {
+            List<SelectListItem> outputList = new List<SelectListItem>();
+
+            for (int i = 1; i <= to; i++)
+            {
+                SelectListItem selectListItem = new SelectListItem();
+
+                selectListItem.Text = GeneralLogic.accessLevelToString(i);
+                selectListItem.Value = i.ToString();
+
+                outputList.Add(selectListItem);
+            }
+
+            return outputList;
+        }
     }
 }

@@ -49,10 +49,12 @@ namespace PokerStatBoard.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
-            if (user.accessLevel < 1)
+            Guid.TryParse(userId, out Guid id);
+
+            if (GeneralLogic.getAccessLevel(id, GeneralLogic.getGroup(groupName).GroupID) < 1)
             {
                 return RedirectToAction("Index", "NoPermission");
             }
@@ -61,7 +63,7 @@ namespace PokerStatBoard.Controllers
 
             if (groupModel == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             CashOutPlayerVM model = new CashOutPlayerVM

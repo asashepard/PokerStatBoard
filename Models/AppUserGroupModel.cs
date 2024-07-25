@@ -17,16 +17,20 @@ namespace PokerStatBoard.Models
         [Required]
         public Guid GroupID { get; set; }
 
+        [Required]
+        public int AccessLevel { get; set; }
+
         public AppUserGroupModel()
         {
             ApplicationUserGroupID = Guid.NewGuid();
         }
 
-        public AppUserGroupModel(Guid ApplicationUserID, Guid GroupID)
+        public AppUserGroupModel(Guid ApplicationUserID, Guid GroupID, int accessLevel)
         {
             ApplicationUserGroupID = Guid.NewGuid();
             this.ApplicationUserID = ApplicationUserID;
             this.GroupID = GroupID;
+            AccessLevel = accessLevel;
         }
     }
 }

@@ -245,6 +245,49 @@ namespace PokerStatBoard.Logic
             return groups;
         }
 
+        public static List<AppUserGroupModel> getAppUserGroupModels(Guid groupID)
+        {
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            List<AppUserGroupModel> output = new List<AppUserGroupModel>();
+
+            foreach (AppUserGroupModel model in dbContext.AppUserGroups)
+            {
+                if (model.GroupID != groupID)
+                {
+                    continue;
+                }
+
+                output.Add(model);
+            }
+
+            return output;
+        }
+
+        public static int getAccessLevel(Guid userID, Guid groupID)
+        {
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            foreach (AppUserGroupModel model in dbContext.AppUserGroups)
+            {
+                if (model.GroupID != groupID || model.ApplicationUserID != userID)
+                {
+                    continue;
+                }
+
+                return model.AccessLevel;
+            }
+
+            return 0;
+        }
+
+        public static string accessLevelToString(int i)
+        {
+            if (i == 1) return "Admin";
+            else if (i > 1) return "Owner";
+            else return "Member";
+        }
+
         public static decimal getPlusMinus(Guid playerID)
         {
             decimal amount = 0;
