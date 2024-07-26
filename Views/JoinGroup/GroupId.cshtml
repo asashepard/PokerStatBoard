@@ -1,0 +1,13 @@
+@model PokerStatBoard.Models.GroupModel
+@{
+    ViewBag.Title = "Join " + Model.Name;
+}
+
+<body onload="redirect()">
+    <script>
+        function redirect() {
+            const url = '@Url.Action("Dashboard", "Home")'
+            window.location.href = url;
+        }
+    </script>
+</body >

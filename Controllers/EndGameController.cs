@@ -88,12 +88,12 @@ namespace PokerStatBoard.Controllers
                 return RedirectToAction("GroupName", "CashOutPlayer", new { groupName = group.Name });
             }
 
-            model.EndDateTime = DateTime.Now;
-            group.PokerGameID = Guid.Empty;
+            dbContext.PokerGames.FirstOrDefault(x => x.PokerGameID == model.PokerGameID).EndDateTime = DateTime.Now;
+            dbContext.Groups.FirstOrDefault(g => g.GroupID == group.GroupID).PokerGameID = Guid.Empty;
 
             foreach (PlayerModel player in dbContext.Players)
             {
-                if (player.IsPlaying)
+                if (player.IsPlaying && player.GroupID == group.GroupID)
                 {
                     player.IsPlaying = false;
                 }

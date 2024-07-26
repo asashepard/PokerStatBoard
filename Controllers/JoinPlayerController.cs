@@ -38,7 +38,7 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Game", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         public ActionResult GroupName(string groupName)
@@ -48,7 +48,7 @@ namespace PokerStatBoard.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Game", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
 
             Guid.TryParse(userId, out Guid id);

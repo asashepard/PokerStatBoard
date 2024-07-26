@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using PokerStatBoard.Logic;
 using PokerStatBoard.Models;
+using PokerStatBoard.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,23 +69,11 @@ namespace PokerStatBoard.Controllers
                 return View("Index", "Home");
             }
 
-            return View(GeneralLogic.getGroups(userID));
-        }
-
-        [Authorize]
-        public ActionResult Leaderboard(string groupName)
-        {
-            GroupModel model = GeneralLogic.getGroup(groupName);
-
-            if (model == null) // bad link
+            DashboardVM model = new DashboardVM
             {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (GeneralLogic.getCurrentGame(model.GroupID).PokerGameID == Guid.Empty) // NO GAME - redirect to home page
-            {
-                return RedirectToAction("Index", "Home");
-            }
+                groupModels = GeneralLogic.getGroups(userID),
+                userID = userID
+            };
 
             return View(model);
         }

@@ -3,13 +3,19 @@
     ViewBag.Title = "Register";
 }
 
+<style>
+    .bg-custom-1 {
+        background-color: rgba(225, 225, 225, 0.8);
+    }
+</style>
+
 <main aria-labelledby="title">
     <div class="container d-flex justify-content-center align-items-center">
-        <div class="card" style="width: 50vh;">
+        <div class="card bg-custom-1 border-0 rounded-4" style="width: 50vh;">
             <div class="card-body">
                 <h2 class="card-title text-center" id="title">@ViewBag.Title:</h2>
                 <hr />
-                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -40,7 +46,7 @@
                     </div>
                     <div class="mb-3 row justify-content-center align-items-center">
                         <div class="col-auto">
-                            @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="mb-3 row justify-content-center">
@@ -49,6 +55,9 @@
                         </div>
                     </div>
                 }
+            </div>
+            <div class="text-center mt-auto">
+                <img src="~/Images/extended_logo.png" class="mb-3" style="width: 300px; max-width: 80vw;" />
             </div>
         </div>
     </div>

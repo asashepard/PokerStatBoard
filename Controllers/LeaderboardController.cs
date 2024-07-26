@@ -8,36 +8,30 @@ using System.Web.Mvc;
 
 namespace PokerStatBoard.Controllers
 {
-    [Authorize]
-    public class PlayerStatsController : Controller
+    public class LeaderboardController : Controller
     {
+        [Authorize]
         public ActionResult Index()
         {
             return RedirectToAction("Dashboard", "Home");
         }
 
-        public ActionResult PlayerId(Guid playerId)
+        [Authorize]
+        public ActionResult GroupName(string groupName)
         {
-            if (playerId == null)
+            GroupModel model = GeneralLogic.getGroup(groupName);
+
+            if (model == null) // bad link
             {
                 return RedirectToAction("Dashboard", "Home");
             }
 
-            Guid.TryParse(playerId.ToString(), out Guid playerID);
-
-            if (playerID == null)
+            if (GeneralLogic.getCurrentGame(model.GroupID).PokerGameID == Guid.Empty) // NO GAME - redirect to home page
             {
                 return RedirectToAction("Dashboard", "Home");
             }
 
-            var player = GeneralLogic.getPlayer(playerID);
-
-            if (player == null)
-            {
-                return RedirectToAction("Dashboard", "Home");
-            }
-
-            return View(player);
+            return View(model);
         }
     }
 }

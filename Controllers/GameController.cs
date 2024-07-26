@@ -40,7 +40,7 @@ namespace PokerStatBoard.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         public ActionResult GroupName(string groupName)
@@ -49,7 +49,12 @@ namespace PokerStatBoard.Controllers
 
             if (model == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            if (model.PokerGameID == Guid.Empty)
+            {
+                return RedirectToAction("Dashboard", "Home");
             }
 
             return View(model);

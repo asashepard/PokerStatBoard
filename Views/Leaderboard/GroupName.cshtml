@@ -59,7 +59,7 @@
         <div class="card bg-custom-1 border-0 rounded-4">
             <div class="card-body">
                 <div class="text-center mb-4">
-                    <h1 class="display-4">Leaderboard</h1>
+                    <h1 class="display-4">Leaderboard: @Model.Name</h1>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -86,7 +86,7 @@
                                             <tr>
                                                 <td>@index</td>
                                                 <td>
-                                                    <a class="text-decoration-none text-purple" href="@Url.Action(player.Name, "PlayerStats")">
+                                                    <a class="text-decoration-none text-purple" href="@Url.Action(player.PlayerID.ToString(), "PlayerStats")">
                                                         @player.Name
                                                     </a>
                                                 </td>
@@ -107,6 +107,9 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center mt-auto">
+                <img src="~/Images/extended_logo.png" class="mb-3" style="width: 300px; max-width: 80vw;" />
+            </div>
         </div>
-</main>
+    </main>
 </body>

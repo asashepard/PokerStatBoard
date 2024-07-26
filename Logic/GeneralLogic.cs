@@ -285,7 +285,7 @@ namespace PokerStatBoard.Logic
         {
             if (i == 1) return "Admin";
             else if (i > 1) return "Owner";
-            else return "Member";
+            else return "Watcher";
         }
 
         public static decimal getPlusMinus(Guid playerID)

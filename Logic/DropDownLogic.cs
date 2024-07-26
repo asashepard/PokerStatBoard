@@ -39,8 +39,6 @@ namespace PokerStatBoard.Logic
             List<SelectListItem> outputList = new List<SelectListItem>();
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
-            List<BuyInModel> buyIns = dbContext.BuyIns.ToList();
-            List<CashOutModel> cashOuts = dbContext.CashOuts.ToList();
             Guid currentGameId = GeneralLogic.getCurrentGame(groupID).PokerGameID;
 
             if (currentGameId == Guid.Empty)
@@ -48,32 +46,7 @@ namespace PokerStatBoard.Logic
                 return outputList;
             }
 
-            List<PlayerModel> currentPlayers = new List<PlayerModel>();
-            foreach (BuyInModel buyIn in buyIns)
-            {
-                if (buyIn.PokerGameID != currentGameId) // only look at current poker game buy-ins
-                {
-                    continue;
-                }
-                PlayerModel player = dbContext.Players.FirstOrDefault(p => p.PlayerID == buyIn.PlayerID);
-                if (!currentPlayers.Contains(player))
-                {
-                    currentPlayers.Add(player);
-                }
-            }
-
-            foreach (CashOutModel cashOut in cashOuts)
-            {
-                if (cashOut.PokerGameID != currentGameId) // only look at current poker game cash-outs
-                {
-                    continue;
-                }
-                PlayerModel player = dbContext.Players.FirstOrDefault(p => p.PlayerID == cashOut.PlayerID);
-                if (currentPlayers.Contains(player))
-                {
-                    currentPlayers.Remove(player);
-                }
-            }
+            List<PlayerModel> currentPlayers = GeneralLogic.getCurrentPlayers(groupID);
 
             foreach (PlayerModel player in currentPlayers)
             {
@@ -104,22 +77,6 @@ namespace PokerStatBoard.Logic
 
                 selectListItem.Text = g.Name;
                 selectListItem.Value = g.GroupID.ToString();
-
-                outputList.Add(selectListItem);
-            }
-
-            return outputList;
-        }
-        public static List<SelectListItem> GetGroupAccessLevels(int to)
-        {
-            List<SelectListItem> outputList = new List<SelectListItem>();
-
-            for (int i = 1; i <= to; i++)
-            {
-                SelectListItem selectListItem = new SelectListItem();
-
-                selectListItem.Text = GeneralLogic.accessLevelToString(i);
-                selectListItem.Value = i.ToString();
 
                 outputList.Add(selectListItem);
             }

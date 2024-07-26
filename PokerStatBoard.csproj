@@ -176,7 +176,9 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\GroupAccessController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JoinGroupController.cs" />
     <Compile Include="Controllers\JoinPlayerController.cs" />
+    <Compile Include="Controllers\LeaderboardController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NoPermissionController.cs" />
     <Compile Include="Controllers\PlayerStatsController.cs" />
@@ -233,6 +235,7 @@
     <Compile Include="ViewModels\CreateGroupVM.cs" />
     <Compile Include="ViewModels\AddPlayerVM.cs" />
     <Compile Include="ViewModels\CashOutPlayerVM.cs" />
+    <Compile Include="ViewModels\DashboardVM.cs" />
     <Compile Include="ViewModels\JoinPlayerVM.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +261,7 @@
     <Content Include="Images\downarrow.gif" />
     <Content Include="Images\extended_logo.png" />
     <Content Include="Images\featuresimage-1.png" />
+    <Content Include="Images\livedot.gif" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -303,13 +307,14 @@
     <Content Include="Views\EndGame\GroupName.cshtml" />
     <Content Include="Views\JoinPlayer\GroupName.cshtml" />
     <Content Include="Views\CashOutPlayer\GroupName.cshtml" />
-    <Content Include="Views\Home\Leaderboard.cshtml" />
-    <Content Include="Views\PlayerStats\Name.cshtml" />
+    <Content Include="Views\PlayerStats\PlayerId.cshtml" />
     <Content Include="Views\NoPermission\Index.cshtml" />
     <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\CreateGroup\Index.cshtml" />
     <Content Include="Views\Game\GroupName.cshtml" />
     <Content Include="Views\GroupAccess\GroupName.cshtml" />
+    <Content Include="Views\JoinGroup\GroupId.cshtml" />
+    <Content Include="Views\Leaderboard\GroupName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -15,8 +15,8 @@ namespace PokerStatBoard
 
             routes.MapRoute(
                 "PlayerStats",
-                "PlayerStats/{name}",
-                new { controller = "PlayerStats", action = "Name" }
+                "PlayerStats/{playerId}",
+                new { controller = "PlayerStats", action = "PlayerId" }
             );
 
             routes.MapRoute(
@@ -35,6 +35,18 @@ namespace PokerStatBoard
                 "Game",
                 "Game/{groupName}",
                 new { controller = "Game", action = "GroupName" }
+            );
+
+            routes.MapRoute(
+                "JoinGroup",
+                "JoinGroup/{groupId}",
+                new { controller = "JoinGroup", action = "GroupId" }
+            );
+
+            routes.MapRoute(
+                "Leaderboard",
+                "Leaderboard/{groupName}",
+                new { controller = "Leaderboard", action = "GroupName" }
             );
 
             routes.MapRoute(
